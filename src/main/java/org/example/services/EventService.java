@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.Event;
 import org.example.entities.Period;
+import org.example.repositories.EventRepository;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -14,29 +15,23 @@ public class EventService {
     private List<Event> events;
     private List<Period> periods;
     private Scanner scanner = new Scanner(System.in);
+    private EventRepository eventRepository;
 
-    public EventService() {
-        this.events = new ArrayList<>();
+    public EventService(EventRepository eventRepository) {
+        this.events = eventRepository.getEvents();
         this.periods = new ArrayList<>();
-    }
-
-    public void addEvent(Event event) {
-        for (Event exisitingEvent : events) {
-            if (event.overlapsWith(exisitingEvent)) {
-                throw new IllegalArgumentException("Event overlaps with an existing event.");
-            }
-        }
-        events.add(event);
+        this.eventRepository = eventRepository;
     }
 
     public void addAllEvents() {
-        boolean addingEvents;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        showEvents();
+        //TODO: mozliwosc kasowania eventow procz ich odczytywania
 
-        do {
+        while (doYouWantContinue()){
             try {
-                Event newEvent = createEvent(formatter);
 
+                Event newEvent = createEvent(formatter);
                 //TODO: ostrzezenie dla uzytkownika ze wydarzenia sa tego samego dnia o innych porach
                 if (isOverlapping(newEvent)) {
                     System.out.println("This event overlaps with existing event.");
@@ -44,14 +39,13 @@ public class EventService {
                     events.add(newEvent);
                     System.out.println("Event added successfully.");
                 }
-                addingEvents = doYouWantContinue();
 
             } catch (Exception e) {
                 System.out.println("Invalid input: " + e.getMessage());
-                addingEvents = true;
             }
-        } while (addingEvents);
+        }
         showEvents();
+        eventRepository.saveEvents(events);
     }
 
     private Event createEvent(DateTimeFormatter formatter) {
@@ -68,6 +62,15 @@ public class EventService {
 
         Event newEvent = new Event(startTime, endTime, priority, description);
         return newEvent;
+    }
+
+    private boolean isOverlapping(Event event) {
+        for (Event existingEvent : events) {
+            if (event.overlapsWith(existingEvent)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean doYouWantContinue() {
@@ -92,15 +95,6 @@ public class EventService {
         } else {
             System.out.println("No events added.");
         }
-    }
-
-    public boolean isOverlapping(Event event) {
-        for (Event existingEvent : events) {
-            if (event.overlapsWith(existingEvent)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void deleteEvent(int index) {

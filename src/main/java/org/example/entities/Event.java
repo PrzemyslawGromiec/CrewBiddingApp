@@ -1,9 +1,10 @@
 package org.example.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Event {
+public class Event implements Serializable {
     private LocalDateTime start;
     private LocalDateTime end;
     private int priority;

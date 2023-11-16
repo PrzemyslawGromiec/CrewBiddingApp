@@ -1,5 +1,7 @@
 package org.example.controllers;
 
+import org.example.repositories.EventBinRepository;
+import org.example.repositories.EventRepository;
 import org.example.services.EventService;
 import org.example.services.FlightService;
 import org.example.services.ReportService;
@@ -14,7 +16,7 @@ public class AppController {
     private ReportService reportService;
 
     public AppController() {
-        this.eventService = new EventService();
+        this.eventService = new EventService(new EventBinRepository());
         this.flightService = new FlightService();
         this.reportService = new ReportService();
     }
