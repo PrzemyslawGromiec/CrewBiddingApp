@@ -30,47 +30,57 @@ public class EventService {
     }
 
     public void addAllEvents() {
-        boolean addingEvents = true;
+        boolean addingEvents;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-        while (addingEvents) {
+        do {
             try {
-                System.out.println("Enter event start time");
-                System.out.println("(in the format of DD-MM-YYYY HH:mm:");
-                LocalDateTime startTime = LocalDateTime.parse(scanner.nextLine(), formatter);
-                System.out.println("Enter event end time:");
-                LocalDateTime endTime = LocalDateTime.parse(scanner.nextLine(), formatter);
-                System.out.println("Enter event priority:");
-                int priority = Integer.parseInt(scanner.nextLine());
-                System.out.println("Add event description below:");
-                String description = scanner.nextLine();
+                Event newEvent = createEvent(formatter);
 
-                Event newEvent = new Event(startTime, endTime, priority, description);
-
+                //TODO: ostrzezenie dla uzytkownika ze wydarzenia sa tego samego dnia o innych porach
                 if (isOverlapping(newEvent)) {
                     System.out.println("This event overlaps with existing event.");
                 } else {
                     events.add(newEvent);
                     System.out.println("Event added successfully.");
                 }
+                addingEvents = doYouWantContinue();
 
-                while (true) {
-                    System.out.println("Do you want to add another event? (yes/no)");
-                    String userInput = scanner.nextLine();
-                    if (userInput.equalsIgnoreCase("yes")) {
-                        break;
-                    } else if (userInput.equalsIgnoreCase("no")) {
-                        addingEvents = false;
-                        break;
-                    } else {
-                        System.out.println("Invalid input. Please enter 'yes' or 'no'");
-                    }
-                }
             } catch (Exception e) {
                 System.out.println("Invalid input: " + e.getMessage());
+                addingEvents = true;
             }
-        }
+        } while (addingEvents);
         showEvents();
+    }
+
+    private Event createEvent(DateTimeFormatter formatter) {
+        System.out.println("Add event description below:");
+        String description = scanner.nextLine();
+        System.out.println("Enter event start time");
+        System.out.println("(in the format of DD-MM-YYYY HH:mm:");
+        LocalDateTime startTime = LocalDateTime.parse(scanner.nextLine(), formatter);
+        System.out.println("Enter event end time:");
+        System.out.println("(in the format of DD-MM-YYYY HH:mm:");
+        LocalDateTime endTime = LocalDateTime.parse(scanner.nextLine(), formatter);
+        System.out.println("Enter event priority (min 1, max 3):");
+        int priority = Integer.parseInt(scanner.nextLine());
+
+        Event newEvent = new Event(startTime, endTime, priority, description);
+        return newEvent;
+    }
+
+    private boolean doYouWantContinue() {
+        System.out.println("Do you want to add another event? (yes/no)");
+        String userInput = scanner.nextLine();
+        if (userInput.equalsIgnoreCase("yes")) {
+            return true;
+        } else if (userInput.equalsIgnoreCase("no")) {
+            return false;
+        } else {
+            System.out.println("Invalid input. Please enter 'yes' or 'no'");
+            return doYouWantContinue();
+        }
     }
 
     private void showEvents() {
