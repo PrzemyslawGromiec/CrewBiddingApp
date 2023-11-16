@@ -1,11 +1,13 @@
 package org.example.controllers;
 
+import org.example.entities.Flight;
 import org.example.repositories.EventBinRepository;
 import org.example.repositories.EventRepository;
 import org.example.services.EventService;
 import org.example.services.FlightService;
 import org.example.services.ReportService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AppController {
@@ -29,16 +31,20 @@ public class AppController {
             choice = getValidOption();
 
             switch (choice) {
-                case 1 ->
-                    //build your roster
-                        System.out.println("This is how app planned your next month.");
+                case 1 -> {
+                    List<Flight> currectFlights =  flightService.getFlights();
+                    for (Flight f : currectFlights) {
+                        System.out.println(f);
+                    }
+                }
+                //build your roster
                 case 2 ->
                     //add your requests
                         eventService.addAllEvents();
 
                 case 3 ->
-                        //your preferences and requirements
-                System.out.println("Add your aircraft types");
+                    //your preferences and requirements
+                        System.out.println("Add your aircraft types");
                 case 4 -> System.out.println("Bye bye!");
                 default -> System.out.println("Incorrect choice. Try again.");
             }

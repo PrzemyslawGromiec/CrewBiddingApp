@@ -67,4 +67,16 @@ public class Flight {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "flightNumber='" + flightNumber + '\'' +
+                ", airportCode='" + airportCode + '\'' +
+                ", reportTime=" + reportTime +
+                ", clearTime=" + clearTime +
+                ", aircraftType=" + aircraftType +
+                ", favourite=" + favourite +
+                '}';
+    }
 }

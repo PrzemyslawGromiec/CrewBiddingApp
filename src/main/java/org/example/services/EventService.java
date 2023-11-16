@@ -33,6 +33,8 @@ public class EventService {
 
                 Event newEvent = createEvent(formatter);
                 //TODO: ostrzezenie dla uzytkownika ze wydarzenia sa tego samego dnia o innych porach
+                //TODO: event musi byc tylko w zakresie biezacego miesiaca
+                //TODO: skladanie LocalDate na podstawie biezacego roku i miesiaca - bez podawania konkretnej godziny zarezerwuje caly dzien
                 if (isOverlapping(newEvent)) {
                     System.out.println("This event overlaps with existing event.");
                 } else {
