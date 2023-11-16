@@ -1,37 +1,15 @@
 package org.example.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Request {
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+abstract class Request {
     private int points;
-    private RequestType type;
-    private String airportCode;
-    private String flightNumber;
+    private int numberOfStars;
 
-    public Request(LocalDateTime startTime, LocalDateTime endTime, int points, RequestType type) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.points = points;
-        this.type = type;
-    }
+    abstract LocalDateTime getStartTime();
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
+    abstract LocalDateTime getEndTime();
 
     public int getPoints() {
         return points;
@@ -41,28 +19,25 @@ public class Request {
         this.points = points;
     }
 
-    public RequestType getType() {
-        return type;
+    abstract RequestType getType();
+
+    public int getNumberOfStars() {
+        return numberOfStars;
     }
 
-    public void setType(RequestType type) {
-        this.type = type;
+    public void setNumberOfStars(int numberOfStars) {
+        this.numberOfStars = numberOfStars;
     }
 
-    public String getAirportCode() {
-        return airportCode;
-    }
-
-    public void setAirportCode(String airportCode) {
-        this.airportCode = airportCode;
-    }
-
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
+    @Override
+    public String toString() {
+        return "Request{"+
+                "start time=" + getStartTime() +
+                "end time=" + getEndTime() +
+                "type=" + getType() +
+                "points=" + points +
+                ", numberOfStars=" + numberOfStars +
+                '}';
     }
 }
 
