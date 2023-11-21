@@ -37,4 +37,8 @@ public class EventRequest extends Request {
     int getNumberOfStars() {
         return events.get(0).getPriority();
     }
+
+    public List<Event> getEvents() {
+        return events;
+    }
 }

@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Event implements Serializable {
-    private static final long serialVersionUID = -1304995337856928787L;
+    private static final long serialVersionUID = 1L;
     private LocalDateTime start;
     private LocalDateTime end;
     private int priority;
     private String description;
+
+    //TODO: id eventu
 
 
     public Event(LocalDateTime start, LocalDateTime end, int priority, String description) {

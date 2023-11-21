@@ -50,6 +50,7 @@ public class EventService {
     }
 
     private Event createEvent() {
+        //TODO: wpisujac dzien istnieje opcja zabookowania calego dnia lub od razu dodanie godziny
         Month eventMonth = LocalDate.now().plusMonths(1).getMonth();
         System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");
@@ -141,6 +142,7 @@ public class EventService {
     }
 
     public void deleteByDescription() {
+        //TODO: usuwanie po id eventu
         System.out.println("In order to delete event, type its description below:");
         String description = scanner.nextLine();
         if(events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {

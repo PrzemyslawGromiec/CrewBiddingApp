@@ -3,6 +3,7 @@ package org.example.repositories;
 import org.example.entities.Event;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventBinRepository implements EventRepository{
@@ -17,7 +18,8 @@ public class EventBinRepository implements EventRepository{
             objectInputStream.close();
             return events;
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
