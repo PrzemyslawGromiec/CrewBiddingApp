@@ -3,7 +3,6 @@ package org.example.repositories;
 import org.example.entities.Event;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventBinRepository implements EventRepository{

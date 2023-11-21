@@ -4,9 +4,7 @@ import org.example.entities.Event;
 import org.example.entities.Period;
 import org.example.repositories.EventRepository;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,17 +22,13 @@ public class EventService {
     }
 
     public void addAllEvents() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        showEvents();
         //TODO: mozliwosc kasowania eventow procz ich odczytywania
 
-        while (doYouWantContinue()){
+        while (doYouWantContinue()) {
             try {
 
-                Event newEvent = createEvent(formatter);
+                Event newEvent = createEvent();
                 //TODO: ostrzezenie dla uzytkownika ze wydarzenia sa tego samego dnia o innych porach
-                //TODO: event musi byc tylko w zakresie biezacego miesiaca
-                //TODO: skladanie LocalDate na podstawie biezacego roku i miesiaca - bez podawania konkretnej godziny zarezerwuje caly dzien
                 if (isOverlapping(newEvent)) {
                     System.out.println("This event overlaps with existing event.");
                 } else {
@@ -50,20 +44,67 @@ public class EventService {
         eventRepository.saveEvents(events);
     }
 
-    private Event createEvent(DateTimeFormatter formatter) {
+    private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime time) {
+        LocalDate twoMonthsAhead = LocalDate.now().plusMonths(1).withDayOfMonth(dayOfMonth);
+        return LocalDateTime.of(twoMonthsAhead, time);
+    }
+
+    private Event createEvent() {
+        Month eventMonth = LocalDate.now().plusMonths(1).getMonth();
+        System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");
         String description = scanner.nextLine();
-        System.out.println("Enter event start time");
-        System.out.println("(in the format of DD-MM-YYYY HH:mm:");
-        LocalDateTime startTime = LocalDateTime.parse(scanner.nextLine(), formatter);
-        System.out.println("Enter event end time:");
-        System.out.println("(in the format of DD-MM-YYYY HH:mm:");
-        LocalDateTime endTime = LocalDateTime.parse(scanner.nextLine(), formatter);
-        System.out.println("Enter event priority (min 1, max 3):");
-        int priority = Integer.parseInt(scanner.nextLine());
 
-        Event newEvent = new Event(startTime, endTime, priority, description);
-        return newEvent;
+        System.out.println("Which day of " + eventMonth + " are you interested in?");
+        System.out.println("Enter the start day of your event (as a number):");
+        int startDay = getValidOption();
+
+        System.out.println("Enter the end day of your event (as a number):");
+        int endDay = getValidOption();
+
+        Map<String, LocalTime> times = getEventTime();
+        LocalTime startTime = times.get("startTime");
+        LocalTime endTime = times.get("endTime");
+
+        LocalDateTime startDateTime = generateEventDateTime(startDay, startTime);
+        LocalDateTime endDateTime = generateEventDateTime(endDay, endTime);
+        int priority = getEventPriority();
+
+        return new Event(startDateTime, endDateTime, priority, description);
+    }
+
+
+    private Map<String, LocalTime> getEventTime() {
+        Map<String, LocalTime> times = new HashMap<>();
+        System.out.println("Enter the time the event starts in a format of (HH:mm) or type 'full' for all day:");
+        String timeInput = scanner.nextLine();
+
+        if (timeInput.equalsIgnoreCase("full")) {
+            times.put("startTime", LocalTime.MIN);
+            times.put("endTime", LocalTime.MAX);
+        } else {
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime startTime = LocalTime.parse(timeInput, timeFormatter);
+            times.put("startTime", startTime);
+
+            System.out.println("Enter the time the event ends in a format of (HH:mm):");
+            timeInput = scanner.nextLine();
+            LocalTime endTime = LocalTime.parse(timeInput, timeFormatter);
+            times.put("endTime", endTime);
+        }
+        return times;
+    }
+
+    private int getEventPriority() {
+        while (true) {
+            System.out.println("Enter event priority (min 1, max 3):");
+            int priority = getValidOption();
+            if (priority >= 1 && priority <= 3) {
+                return priority;
+            } else {
+                System.out.println("Invalid number.");
+            }
+        }
     }
 
     private boolean isOverlapping(Event event) {
@@ -88,14 +129,24 @@ public class EventService {
         }
     }
 
-    private void showEvents() {
+    public void showEvents() {
         if (!events.isEmpty()) {
             System.out.println("List of all your events:");
             for (Event event : events) {
                 System.out.println(event);
             }
         } else {
-            System.out.println("No events added.");
+            System.out.println("List of events is empty.");
+        }
+    }
+
+    public void deleteByDescription() {
+        System.out.println("In order to delete event, type its description below:");
+        String description = scanner.nextLine();
+        if(events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {
+            System.out.println("Event deleted successfully.");
+        } else {
+            System.out.println("Event with that description doesn't exist.");
         }
     }
 
@@ -165,6 +216,31 @@ public class EventService {
         Set<LocalDate> coveredDates = getCoveredDays();
         for (LocalDate coveredDate : coveredDates) {
             System.out.println(coveredDate);
+        }
+    }
+
+    public boolean isUserInputValid(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+        for (char c : input.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getValidOption() {
+        String userInput;
+        while (true) {
+            userInput = scanner.nextLine();
+
+            if (isUserInputValid(userInput)) {
+                return Integer.parseInt(userInput);
+            } else {
+                System.out.println("Invalid input. Please enter a number!");
+            }
         }
     }
 

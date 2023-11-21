@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Event implements Serializable {
+    private static final long serialVersionUID = -1304995337856928787L;
     private LocalDateTime start;
     private LocalDateTime end;
     private int priority;
@@ -47,6 +48,10 @@ public class Event implements Serializable {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

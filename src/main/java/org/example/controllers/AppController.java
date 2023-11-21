@@ -32,16 +32,13 @@ public class AppController {
 
             switch (choice) {
                 case 1 -> {
-                    List<Flight> currectFlights =  flightService.getFlights();
-                    for (Flight f : currectFlights) {
+                    List<Flight> currentFlights =  flightService.getFlights();
+                    for (Flight f : currentFlights) {
                         System.out.println(f);
                     }
                 }
-                //build your roster
                 case 2 ->
-                    //add your requests
-                        eventService.addAllEvents();
-
+                       modifyRequests();
                 case 3 ->
                     //your preferences and requirements
                         System.out.println("Add your aircraft types");
@@ -59,6 +56,19 @@ public class AppController {
         System.out.println("2. Add your requested days.");
         System.out.println("3. Add your current trainings.");
         System.out.println("4. End the application.");
+    }
+
+    public void modifyRequests() {
+        eventService.showEvents();
+        System.out.println("Type 'add' to add even or 'delete' to remove event.");
+        String userInput = scanner.nextLine();
+        if (userInput.equalsIgnoreCase("add")) {
+            eventService.addAllEvents();
+        } else if (userInput.equalsIgnoreCase("delete")) {
+            eventService.deleteByDescription();
+        } else {
+            System.out.println("Invalid input. Type 'add' or 'delete' only.");
+        }
     }
 
     public boolean isUserInputValid(String input) {

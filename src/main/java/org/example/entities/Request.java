@@ -3,7 +3,7 @@ package org.example.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
-abstract class Request {
+public abstract class Request {
     private int points;
     private int numberOfStars;
 
@@ -11,9 +11,7 @@ abstract class Request {
 
     abstract LocalDateTime getEndTime();
 
-    public int getPoints() {
-        return points;
-    }
+    abstract int getPoints();
 
     public void setPoints(int points) {
         this.points = points;
@@ -21,9 +19,7 @@ abstract class Request {
 
     abstract RequestType getType();
 
-    public int getNumberOfStars() {
-        return numberOfStars;
-    }
+    abstract int getNumberOfStars();
 
     public void setNumberOfStars(int numberOfStars) {
         this.numberOfStars = numberOfStars;
@@ -35,8 +31,8 @@ abstract class Request {
                 "start time=" + getStartTime() +
                 "end time=" + getEndTime() +
                 "type=" + getType() +
-                "points=" + points +
-                ", numberOfStars=" + numberOfStars +
+                "points=" + getPoints() +
+                ", numberOfStars=" + getNumberOfStars() +
                 '}';
     }
 }

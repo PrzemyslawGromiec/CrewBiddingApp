@@ -20,7 +20,17 @@ public class FlightRequest extends Request{
     }
 
     @Override
+    int getPoints() {
+        return 0;
+    }
+
+    @Override
     RequestType getType() {
         return RequestType.FLIGHT;
+    }
+
+    @Override
+    int getNumberOfStars() {
+        return 0;
     }
 }

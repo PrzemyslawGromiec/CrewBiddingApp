@@ -24,7 +24,17 @@ public class EventRequest extends Request {
     }
 
     @Override
+    int getPoints() {
+        return 0;
+    }
+
+    @Override
     RequestType getType() {
         return RequestType.EVENT;
+    }
+
+    @Override
+    int getNumberOfStars() {
+        return events.get(0).getPriority();
     }
 }
