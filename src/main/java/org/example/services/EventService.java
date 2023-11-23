@@ -10,20 +10,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventService {
-    private List<Event> events;
-    private List<Period> periods;
     private Scanner scanner = new Scanner(System.in);
+    private List<Event> events;
     private EventRepository eventRepository;
+
+    //TODO:eventService da okresy, controller przekaze je do flightService, zeby dal loty w tych okresach
 
     public EventService(EventRepository eventRepository) {
         this.events = eventRepository.getEvents();
-        this.periods = new ArrayList<>();
         this.eventRepository = eventRepository;
     }
 
     public void addAllEvents() {
         //TODO: mozliwosc kasowania eventow procz ich odczytywania
-
         while (doYouWantContinue()) {
             try {
 

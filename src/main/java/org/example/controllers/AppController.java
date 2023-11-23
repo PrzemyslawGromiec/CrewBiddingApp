@@ -6,6 +6,7 @@ import org.example.repositories.EventRepository;
 import org.example.services.EventService;
 import org.example.services.FlightService;
 import org.example.services.ReportService;
+import org.example.services.RequestFactory;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ public class AppController {
     private EventService eventService;
     private FlightService flightService;
     private ReportService reportService;
+
 
     public AppController() {
         this.eventService = new EventService(new EventBinRepository());
@@ -32,10 +34,15 @@ public class AppController {
 
             switch (choice) {
                 case 1 -> {
-                    List<Flight> currentFlights =  flightService.getFlights();
-                    for (Flight f : currentFlights) {
-                        System.out.println(f);
-                    }
+                    System.out.println(flightService.getFlights().size() + " flights loaded.");
+
+                    // - wyswietlenie eventRequestow i pytanie uzytkownika czy sie zgadza
+                    // - jesli sie nie zgadza, to przerywamy proces i ma mozliwosc poporawienia swoich wolnych
+                    // - program generuje okresy i wypiuje je i sprawdza czy wszystko sie zgadza - jesl sie nie zgadza, to tak jak wczesniej
+                    // - wypelnienie okresow lotami
+                    // - iterowanie po okresach i pozwalanie uzytkownikowi wybrac od 1 do kilku lotow w ramach jednego okresu
+                    // - na bazie wyborow uzytkownika w tym priority beda kreowane na koniec requesty lotow
+                    // - skladany jest koncowy raport i przeliczane sa priorytety na punkty
                 }
                 case 2 ->
                        modifyRequests();
@@ -57,6 +64,8 @@ public class AppController {
         System.out.println("3. Add your current trainings.");
         System.out.println("4. End the application.");
     }
+
+
 
     public void modifyRequests() {
         eventService.showEvents();

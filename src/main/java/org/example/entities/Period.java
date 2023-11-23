@@ -1,28 +1,23 @@
 package org.example.entities;
 
-import org.example.services.EventService;
-
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Period {
 
     //czy ta klasa nie powinna jakos wspolpracowac z klasa EventService
 
-    private List<LocalDateTime> startTimes;
-    private List<LocalDateTime> endTimes;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private List<Flight> flights = new ArrayList<>();
 
-    public Period() {
-        this.startTimes = new ArrayList<>();
-        this.endTimes = new ArrayList<>();
+    public Period(LocalDateTime startTime, LocalDateTime endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-/*    public Duration calculateTotalPeriod() {
+    /*    public Duration calculateTotalPeriod() {
         if (startTimes.isEmpty()) {
             return Duration.ZERO;
         }
@@ -76,11 +71,19 @@ public class Period {
         }
     }*/
 
-    public List<LocalDateTime> getStartTimes() {
-        return startTimes;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public List<LocalDateTime> getEndTimes() {
-        return endTimes;
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Period{" +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
     }
 }
