@@ -69,8 +69,9 @@ public class EventService {
         LocalDateTime startDateTime = generateEventDateTime(startDay, startTime);
         LocalDateTime endDateTime = generateEventDateTime(endDay, endTime);
         int priority = getEventPriority();
+        int eventId = eventRepository.getNextId();
 
-        return new Event(startDateTime, endDateTime, priority, description);
+        return new Event(eventId,startDateTime, endDateTime, priority, description);
     }
 
 

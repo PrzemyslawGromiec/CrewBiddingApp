@@ -9,31 +9,49 @@ import java.util.List;
 public class EventBinRepository implements EventRepository{
 
     private static final String FILE_NAME = "events.bin";
+    private int nextId = 0;
+    private List<Event> events;
+
+    public EventBinRepository() {
+        loadEvents();
+    }
+
+    private void loadEvents() {
+        try {
+            File file = new File(FILE_NAME);
+            if (file.exists()) {
+                ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
+                nextId = objectInputStream.readInt();
+                this.events = (List<Event>) objectInputStream.readObject();
+                objectInputStream.close();
+            } else {
+                this.events = new ArrayList<>();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            this.events = new ArrayList<>();
+        }
+    }
 
     @Override
     public List<Event> getEvents() {
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(FILE_NAME));
-            List<Event> events = (List<Event>) objectInputStream.readObject();
-            objectInputStream.close();
-            return events;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        return new ArrayList<>(this.events);
     }
 
     @Override
     public void saveEvents(List<Event> events) {
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
-            objectOutputStream.writeObject(events);
+            objectOutputStream.writeInt(nextId);
+            objectOutputStream.writeObject(new ArrayList<>(events));
             objectOutputStream.close();
-        } catch (FileNotFoundException e) {
-            throw new IllegalStateException(e);
-            //TODO:refactor
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error saving events", e);
         }
     }
+
+    public int getNextId() {
+        return nextId++;
+    }
 }
+

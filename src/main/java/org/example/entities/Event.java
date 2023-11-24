@@ -6,18 +6,19 @@ import java.time.LocalDateTime;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private LocalDateTime start;
     private LocalDateTime end;
     private int priority;
     private String description;
+    private int id;
 
-    //TODO: id eventu
 
-
-    public Event(LocalDateTime start, LocalDateTime end, int priority, String description) {
+    public Event(int id, LocalDateTime start, LocalDateTime end, int priority, String description) {
         if(end.isBefore(start)) {
             throw new IllegalArgumentException("End time must be after start date.");
         }
+        this.id = id;
         this.start = start;
         this.end = end;
         this.priority = priority;
@@ -56,10 +57,19 @@ public class Event implements Serializable {
         return description;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
-                "start = " + start +
+                "id: " + id +
+                " ,start = " + start +
                 ", end = " + end +
                 ", priority=" + priority +
                 ", description='" + description + '\'' +

@@ -11,7 +11,7 @@ import java.util.List;
 public class PeriodFactory {
     public List<Period> createPeriodsBetweenRequests(List<Request> requests) {
         List<Period> createdPeriods = new ArrayList<>();
-        EventRequest previousEventRequest = null;
+        EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
 
         if (!requests.isEmpty() && requests.get(0) instanceof EventRequest firstRequest) {
             if (firstRequest.getStartTime().getDayOfMonth() != 1) {
