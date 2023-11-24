@@ -29,6 +29,12 @@ public class Event implements Serializable {
         return !this.end.isBefore(other.start) && !this.start.isAfter(other.end);
     }
 
+    public boolean isAtThatDayDifferentTime(Event event) {
+        return (this.start.toLocalDate().equals(event.start.toLocalDate()) ||
+                this.end.toLocalDate().equals(event.start.toLocalDate()) &&
+                this.end.isBefore(event.start));
+    }
+
     public LocalDateTime getStart() {
         return start;
     }

@@ -23,14 +23,16 @@ public class EventService {
 
     public void addAllEvents() {
         //TODO: mozliwosc kasowania eventow procz ich odczytywania
-        while (doYouWantContinue()) {
+        do {
             try {
-
                 Event newEvent = createEvent();
-                //TODO: ostrzezenie dla uzytkownika ze wydarzenia sa tego samego dnia o innych porach
                 if (isOverlapping(newEvent)) {
                     System.out.println("This event overlaps with existing event.");
+
                 } else {
+                    if (isSameDayDifferentTime(newEvent)) {
+                        System.out.println("Warning: this event is at the same day as existing event.");
+                    }
                     events.add(newEvent);
                     System.out.println("Event added successfully.");
                 }
@@ -38,7 +40,7 @@ public class EventService {
             } catch (Exception e) {
                 System.out.println("Invalid input: " + e.getMessage());
             }
-        }
+        } while (doYouWantContinue());
         showEvents();
         eventRepository.saveEvents(events);
     }
@@ -71,7 +73,7 @@ public class EventService {
         int priority = getEventPriority();
         int eventId = eventRepository.getNextId();
 
-        return new Event(eventId,startDateTime, endDateTime, priority, description);
+        return new Event(eventId, startDateTime, endDateTime, priority, description);
     }
 
 
@@ -117,6 +119,14 @@ public class EventService {
         return false;
     }
 
+    private boolean isSameDayDifferentTime(Event newEvent) {
+        for (Event exitingEvent : events) {
+            if (exitingEvent.isAtThatDayDifferentTime(newEvent));
+            return true;
+        }
+        return false;
+    }
+
     private boolean doYouWantContinue() {
         System.out.println("Do you want to add another event? (yes/no)");
         String userInput = scanner.nextLine();
@@ -142,10 +152,9 @@ public class EventService {
     }
 
     public void deleteByDescription() {
-        //TODO: usuwanie po id eventu
         System.out.println("In order to delete event, type its description below:");
         String description = scanner.nextLine();
-        if(events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {
+        if (events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {
             System.out.println("Event deleted successfully.");
         } else {
             System.out.println("Event with that description doesn't exist.");
