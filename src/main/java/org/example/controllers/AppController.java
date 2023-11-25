@@ -60,7 +60,7 @@ public class AppController {
     public void displayMenu() {
         System.out.println("What would you like to do?");
         System.out.println("1. Help me to create my schedule.");
-        System.out.println("2. Add your requested days.");
+        System.out.println("2. Modify (add/delete) your requests.");
         System.out.println("3. Add your current trainings.");
         System.out.println("4. End the application.");
     }
@@ -74,9 +74,10 @@ public class AppController {
         if (userInput.equalsIgnoreCase("add")) {
             eventService.addAllEvents();
         } else if (userInput.equalsIgnoreCase("delete")) {
-            eventService.deleteByDescription();
+            eventService.deleteById();
         } else {
             System.out.println("Invalid input. Type 'add' or 'delete' only.");
+            modifyRequests();
         }
     }
 

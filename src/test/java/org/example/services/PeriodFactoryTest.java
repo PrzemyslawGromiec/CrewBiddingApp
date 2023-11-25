@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PeriodFactoryTest {
+    private static int id = 0;
 
     @Test
     public void test() {
@@ -38,11 +39,18 @@ class PeriodFactoryTest {
 
 
     private Request createRequest(int startDay, int endDay) {
-        Event event1 = new Event(LocalDateTime.of(2023,12,startDay, 0,0),
+        Event event1 = new Event(generateId(), LocalDateTime.of(2023,12,startDay, 0,0),
                 LocalDateTime.of(2023,12,endDay,0,0),3,"uni");
         EventRequest request = new EventRequest(List.of(event1));
 
         return request;
+    }
+
+    private int generateId() {
+        int startingId = 0;
+        startingId = id;
+        startingId++;
+        return startingId;
     }
 
 }

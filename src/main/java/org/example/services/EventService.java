@@ -22,7 +22,6 @@ public class EventService {
     }
 
     public void addAllEvents() {
-        //TODO: mozliwosc kasowania eventow procz ich odczytywania
         do {
             try {
                 Event newEvent = createEvent();
@@ -158,6 +157,16 @@ public class EventService {
             System.out.println("Event deleted successfully.");
         } else {
             System.out.println("Event with that description doesn't exist.");
+        }
+    }
+
+    public void deleteById() {
+        System.out.println("Enter event ID number to delete from database:");
+        int userInput = getValidOption();
+        if (events.removeIf(event -> event.getId() == userInput)) {
+            System.out.println("Event deleted successfully.");
+        } else {
+            System.out.println("Event with that ID number doesn't exist.");
         }
     }
 

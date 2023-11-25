@@ -21,13 +21,13 @@ class RequestFactoryTest {
 
         //TODO: metoda przetestuje scenariusz czy np 20 eventow dzien po dniu i je sklei do jednego
 
-        Event event1 = new Event(LocalDateTime.of(2023, 12, 12, 10, 15),
+        Event event1 = new Event(1,LocalDateTime.of(2023, 12, 12, 10, 15),
                 LocalDateTime.of(2023, 12, 13, 10, 0), 3, "uni");
-        Event event2 = new Event(LocalDateTime.of(2023, 12, 14, 10, 15),
+        Event event2 = new Event(2,LocalDateTime.of(2023, 12, 14, 10, 15),
                 LocalDateTime.of(2023, 12, 15, 10, 0), 2, "uni");
-        Event event3 = new Event(LocalDateTime.of(2023, 12, 14, 10, 15),
+        Event event3 = new Event(3,LocalDateTime.of(2023, 12, 14, 10, 15),
                 LocalDateTime.of(2023, 12, 17, 10, 0), 2, "uni");
-        Event event4 = new Event(LocalDateTime.of(2023, 12, 20, 10, 15),
+        Event event4 = new Event(4,LocalDateTime.of(2023, 12, 20, 10, 15),
                 LocalDateTime.of(2023, 12, 22, 10, 0), 2, "uni");
 
 
