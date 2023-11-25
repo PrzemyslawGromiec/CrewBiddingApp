@@ -120,8 +120,9 @@ public class EventService {
 
     private boolean isSameDayDifferentTime(Event newEvent) {
         for (Event exitingEvent : events) {
-            if (exitingEvent.isAtThatDayDifferentTime(newEvent));
-            return true;
+            if (exitingEvent.isAtThatDayDifferentTime(newEvent)) {
+                return true;
+            }
         }
         return false;
     }
@@ -150,7 +151,7 @@ public class EventService {
         }
     }
 
-    public void deleteByDescription() {
+    private void deleteByDescription() {
         System.out.println("In order to delete event, type its description below:");
         String description = scanner.nextLine();
         if (events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {
@@ -168,13 +169,6 @@ public class EventService {
         } else {
             System.out.println("Event with that ID number doesn't exist.");
         }
-    }
-
-    public void deleteEvent(int index) {
-        if (index < 0 || index >= events.size()) {
-            throw new IndexOutOfBoundsException("Invalid index for deleting event.");
-        }
-        events.remove(index);
     }
 
     public List<Event> getEvents() {

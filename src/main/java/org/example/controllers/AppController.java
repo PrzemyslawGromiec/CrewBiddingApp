@@ -44,8 +44,7 @@ public class AppController {
                     // - na bazie wyborow uzytkownika w tym priority beda kreowane na koniec requesty lotow
                     // - skladany jest koncowy raport i przeliczane sa priorytety na punkty
                 }
-                case 2 ->
-                       modifyRequests();
+                case 2 -> modifyRequests();
                 case 3 ->
                     //your preferences and requirements
                         System.out.println("Add your aircraft types");
@@ -65,9 +64,7 @@ public class AppController {
         System.out.println("4. End the application.");
     }
 
-
-
-    public void modifyRequests() {
+    private void modifyRequests() {
         eventService.showEvents();
         System.out.println("Type 'add' to add even or 'delete' to remove event.");
         String userInput = scanner.nextLine();
