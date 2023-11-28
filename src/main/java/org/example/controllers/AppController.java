@@ -1,12 +1,12 @@
 package org.example.controllers;
 
+import org.example.entities.EventRequest;
 import org.example.entities.Flight;
+import org.example.entities.Period;
+import org.example.entities.Request;
 import org.example.repositories.EventBinRepository;
 import org.example.repositories.EventRepository;
-import org.example.services.EventService;
-import org.example.services.FlightService;
-import org.example.services.ReportService;
-import org.example.services.RequestFactory;
+import org.example.services.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -17,12 +17,16 @@ public class AppController {
     private EventService eventService;
     private FlightService flightService;
     private ReportService reportService;
+    private PeriodFactory periodFactory;
+    private RequestFactory requestFactory;
 
 
     public AppController() {
         this.eventService = new EventService(new EventBinRepository());
         this.flightService = new FlightService();
         this.reportService = new ReportService();
+        this.periodFactory = new PeriodFactory();
+        this.requestFactory = new RequestFactory();
     }
 
     public void run() {
@@ -35,13 +39,23 @@ public class AppController {
             switch (choice) {
                 case 1 -> {
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
+                    List<EventRequest> requests = requestFactory.createRequests(eventService.getEvents());
+                    List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(requests);
+                    for (Period generatedPeriod : generatedPeriods) {
+                        System.out.println(generatedPeriod);
+                    }
+
 
                     // - wyswietlenie eventRequestow i pytanie uzytkownika czy sie zgadza
                     // - jesli sie nie zgadza, to przerywamy proces i ma mozliwosc poporawienia swoich wolnych
                     // - program generuje okresy i wypiuje je i sprawdza czy wszystko sie zgadza - jesl sie nie zgadza, to tak jak wczesniej
-                    // - wypelnienie okresow lotami
                     // - iterowanie po okresach i pozwalanie uzytkownikowi wybrac od 1 do kilku lotow w ramach jednego okresu
-                    // - na bazie wyborow uzytkownika w tym priority beda kreowane na koniec requesty lotow
+                    // - w trakcie iteracji:
+                    //      - period jest uzupelniany lotami
+                    //      - upozadkowanie wg ulubionych lub dlugosci lotu itp
+                    //      - loty sa prezentowane uzykownikowi
+                    //      - uzytkownik wybiera od 1 do kilku lotow i nadaje im priorytety (wybieranie za pomoca numeru pozycji)
+                    //      - kazdy wybor uzytkownika powoduje stworzenie FlightRequest dla wybranego przez niego lotu i priorytet
                     // - skladany jest koncowy raport i przeliczane sa priorytety na punkty
                 }
                 case 2 -> modifyRequests();

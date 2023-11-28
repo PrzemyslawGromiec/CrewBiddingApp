@@ -17,6 +17,10 @@ public class Period {
         this.endTime = endTime;
     }
 
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
     /*    public Duration calculateTotalPeriod() {
         if (startTimes.isEmpty()) {
             return Duration.ZERO;

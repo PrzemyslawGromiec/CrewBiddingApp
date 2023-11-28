@@ -6,14 +6,22 @@ import org.example.entities.Request;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PeriodFactory {
-    public List<Period> createPeriodsBetweenRequests(List<Request> requests) {
+    public List<Period> createPeriodsBetweenRequests(List<EventRequest> requests) {
         List<Period> createdPeriods = new ArrayList<>();
-        EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
+        if (requests.isEmpty()) {
+         //   return Collections.singletonList(new Period(LocalDateTime.now().at))//todo od poczatku miesiaca do konca
+        }
 
-        if (!requests.isEmpty() && requests.get(0) instanceof EventRequest firstRequest) {
+        EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
+        EventRequest firstRequest = requests.get(0);
+
+
+        //na potrzeby pierwszego perioda, jeszcze przed eventami
+        if (!requests.isEmpty() ) {
             if (firstRequest.getStartTime().getDayOfMonth() != 1) {
                 LocalDateTime periodStart = firstRequest.getStartTime().withDayOfMonth(1).toLocalDate().atStartOfDay();
                 LocalDateTime periodEnd = firstRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
@@ -22,20 +30,16 @@ public class PeriodFactory {
             previousEventRequest = firstRequest;
         }
 
+
         for (int i = 1; i < requests.size(); i++) {
-            if (requests.get(i) instanceof EventRequest currentEventRequest) {
+            EventRequest currentEventRequest = requests.get(i);
                 LocalDateTime periodStart = previousEventRequest.getEndTime().toLocalDate().atStartOfDay().plusDays(1);
                 LocalDateTime periodEnd = currentEventRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
                 if (periodStart.isBefore(periodEnd)) {
                     createdPeriods.add(new Period(periodStart, periodEnd));
                 }
                 previousEventRequest = currentEventRequest;
-            }
         }
-        for (Period createdPeriod : createdPeriods) {
-            System.out.println(createdPeriod);
-        }
-
         return createdPeriods;
         }
     }

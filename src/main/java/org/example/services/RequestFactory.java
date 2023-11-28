@@ -10,9 +10,9 @@ import java.util.List;
 
 public class RequestFactory {
 
-    public List<Request> createRequests(List<Event> events) {
+    public List<EventRequest> createRequests(List<Event> events) {
 
-        List<Request> requests = new ArrayList<>();
+        List<EventRequest> requests = new ArrayList<>();
         events.sort(Comparator.comparing(Event::getStart));
         List<List<Event>> groupedEvents = new ArrayList<>();
 

@@ -46,7 +46,7 @@ class RequestFactoryTest {
             System.out.println(event);
         }
 
-        List<Request> requests = requestFactory.createRequests(events);
+        List<EventRequest> requests = requestFactory.createRequests(events);
         for (Request request : requests) {
             System.out.println(request);
         }

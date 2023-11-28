@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.entities.Event;
+import org.example.entities.EventRequest;
 import org.example.entities.Request;
 import org.example.services.PeriodFactory;
 import org.example.services.RequestFactory;
@@ -28,7 +29,7 @@ public class MainTest {
         events.add(event3);
         events.add(event4);
 
-        List<Request> requests = requestFactory.createRequests(events);
+        List<EventRequest> requests = requestFactory.createRequests(events);
         for (Request request : requests) {
             System.out.println(request);
         }
