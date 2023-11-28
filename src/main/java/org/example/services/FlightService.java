@@ -5,10 +5,7 @@ import org.example.entities.Flight;
 import org.example.entities.Period;
 
 import java.time.*;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FlightService {
     private List<Flight> flights = new ArrayList<>();
@@ -22,6 +19,8 @@ public class FlightService {
                 LocalTime.of(9,25),Duration.ofHours(8)));
         flights.addAll(generateCustomRecurringFlights("BA243","FCO",AircraftType.A320,
                 LocalTime.of(5,25),Duration.ofHours(11)));
+        flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA190","NCE",AircraftType.A320,
+                LocalTime.of(6,25),Duration.ofHours(7).plusMinutes(25),EnumSet.complementOf(EnumSet.of(DayOfWeek.FRIDAY))));
 
     }
 
@@ -40,6 +39,24 @@ public class FlightService {
         }
         return flights;
     }
+
+    public List<Flight> generateCustomRecurringFlightsForSelectedDays(String flightNumber, String airportCode,
+           AircraftType type, LocalTime takeoffTime, Duration flightLength, Set<DayOfWeek> operationDays) {
+        List<Flight> flightsForSelectedDays = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfTheMonth = today.plusMonths(1).withDayOfMonth(1);
+
+        for (LocalDate date = firstDayOfTheMonth; date.getMonth() == firstDayOfTheMonth.getMonth(); date = date.plusDays(1)) {
+            if (operationDays.contains(date.getDayOfWeek())) {
+                LocalDateTime takeoffDateTime = date.atTime(takeoffTime);
+                LocalDateTime landingDateTime = takeoffDateTime.plus(flightLength);
+                flightsForSelectedDays.add(new Flight(flightNumber,airportCode,takeoffDateTime,landingDateTime,type));
+            }
+        }
+        return flights;
+    }
+
+
 
     public void fillPeriodWithFlights(Period period) {
 
