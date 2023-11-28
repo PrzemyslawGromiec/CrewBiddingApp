@@ -10,10 +10,6 @@ import java.util.List;
 
 public class RequestFactory {
 
-    //przeglada eventy i laczy je wg ich priorytetow i dat sklejajac i opakowując w requesty
-    //w jednym requescie moga byc tylko eventy o tym samym priorytecie
-    //w jednym requescie moga byc tylko eventy których nie dzieli jeden pelny dzien
-
     public List<Request> createRequests(List<Event> events) {
 
         List<Request> requests = new ArrayList<>();
@@ -43,5 +39,4 @@ public class RequestFactory {
         }
         return requests;
     }
-
 }
