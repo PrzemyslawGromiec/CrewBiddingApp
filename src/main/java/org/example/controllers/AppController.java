@@ -80,12 +80,14 @@ public class AppController {
 
     private void modifyRequests() {
         eventService.showEvents();
-        System.out.println("Type 'add' to add even or 'delete' to remove event.");
+        System.out.println("Type 'add' to add even, 'delete' to remove event, 'exit' to go back.");
         String userInput = scanner.nextLine();
         if (userInput.equalsIgnoreCase("add")) {
             eventService.addAllEvents();
         } else if (userInput.equalsIgnoreCase("delete")) {
             eventService.deleteById();
+        } else if (userInput.equalsIgnoreCase("exit")) {
+            System.out.println("Taking you back to the main menu.");
         } else {
             System.out.println("Invalid input. Type 'add' or 'delete' only.");
             modifyRequests();
