@@ -13,10 +13,11 @@ public class PeriodFactory {
     public List<Period> createPeriodsBetweenRequests(List<EventRequest> requests) {
         List<Period> createdPeriods = new ArrayList<>();
         if (requests.isEmpty()) {
-            LocalDateTime nextMonthDate = LocalDateTime.now().plusMonths(1);
-            Month nextMonth = nextMonthDate.getMonth();
-            return Collections.singletonList(new Period(nextMonthDate.withDayOfMonth(1),
-                    nextMonthDate.withDayOfMonth(nextMonth.maxLength())));
+            LocalDateTime firstDayOfNextMonth = LocalDateTime.now().plusMonths(1).toLocalDate().atTime(LocalTime.MIN);
+            LocalDateTime lastDayOfTheMonth = LocalDateTime.now().plusMonths(1).toLocalDate().atTime(LocalTime.MAX);
+            Month nextMonth = firstDayOfNextMonth.getMonth();
+            return Collections.singletonList(new Period(firstDayOfNextMonth.withDayOfMonth(1),
+                    lastDayOfTheMonth.withDayOfMonth(nextMonth.maxLength())));
         }
 
         EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
