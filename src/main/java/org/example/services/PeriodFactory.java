@@ -2,9 +2,9 @@ package org.example.services;
 
 import org.example.entities.EventRequest;
 import org.example.entities.Period;
-import org.example.entities.Request;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,14 +13,16 @@ public class PeriodFactory {
     public List<Period> createPeriodsBetweenRequests(List<EventRequest> requests) {
         List<Period> createdPeriods = new ArrayList<>();
         if (requests.isEmpty()) {
-         //   return Collections.singletonList(new Period(LocalDateTime.now().at))//todo od poczatku miesiaca do konca
+            LocalDateTime nextMonthDate = LocalDateTime.now().plusMonths(1);
+            Month nextMonth = nextMonthDate.getMonth();
+            return Collections.singletonList(new Period(nextMonthDate.withDayOfMonth(1),
+                    nextMonthDate.withDayOfMonth(nextMonth.maxLength())));
         }
 
         EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
         EventRequest firstRequest = requests.get(0);
 
 
-        //na potrzeby pierwszego perioda, jeszcze przed eventami
         if (!requests.isEmpty() ) {
             if (firstRequest.getStartTime().getDayOfMonth() != 1) {
                 LocalDateTime periodStart = firstRequest.getStartTime().withDayOfMonth(1).toLocalDate().atStartOfDay();

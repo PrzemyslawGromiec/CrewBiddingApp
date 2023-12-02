@@ -13,14 +13,14 @@ public class FlightService {
 
     public FlightService() {
         this.today = LocalDate.now();
-        flights.addAll(generateCustomRecurringFlights("BA210","WAW", AircraftType.A320,
-                LocalTime.of(10,30),Duration.ofHours(10)));
-        flights.addAll(generateCustomRecurringFlights("BA150", "FRA",AircraftType.A320,
-                LocalTime.of(9,25),Duration.ofHours(8)));
-        flights.addAll(generateCustomRecurringFlights("BA243","FCO",AircraftType.A320,
-                LocalTime.of(5,25),Duration.ofHours(11)));
-        flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA190","NCE",AircraftType.A320,
-                LocalTime.of(6,25),Duration.ofHours(7).plusMinutes(25),EnumSet.complementOf(EnumSet.of(DayOfWeek.FRIDAY))));
+        flights.addAll(generateCustomRecurringFlights("BA210", "WAW", AircraftType.A320,
+                LocalTime.of(10, 30), Duration.ofHours(10)));
+        flights.addAll(generateCustomRecurringFlights("BA150", "FRA", AircraftType.A320,
+                LocalTime.of(9, 25), Duration.ofHours(8)));
+        flights.addAll(generateCustomRecurringFlights("BA243", "FCO", AircraftType.A320,
+                LocalTime.of(5, 25), Duration.ofHours(11)));
+        flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA190", "NCE", AircraftType.A320,
+                LocalTime.of(6, 25), Duration.ofHours(7).plusMinutes(25), EnumSet.complementOf(EnumSet.of(DayOfWeek.FRIDAY))));
 
     }
 
@@ -41,21 +41,21 @@ public class FlightService {
     }
 
     public List<Flight> generateCustomRecurringFlightsForSelectedDays(String flightNumber, String airportCode,
-           AircraftType type, LocalTime takeoffTime, Duration flightLength, Set<DayOfWeek> operationDays) {
+                                                                      AircraftType type, LocalTime takeoffTime, Duration flightLength, Set<DayOfWeek> operationDays) {
         List<Flight> flightsForSelectedDays = new ArrayList<>();
         LocalDate today = LocalDate.now();
-        LocalDate firstDayOfTheMonth = today.plusMonths(1).withDayOfMonth(1);
+        LocalDate date = today.plusMonths(1).withDayOfMonth(1);
 
-        for (LocalDate date = firstDayOfTheMonth; date.getMonth() == firstDayOfTheMonth.getMonth(); date = date.plusDays(1)) {
+        while (date.getMonth() == today.plusMonths(1).getMonth()) {
             if (operationDays.contains(date.getDayOfWeek())) {
                 LocalDateTime takeoffDateTime = date.atTime(takeoffTime);
                 LocalDateTime landingDateTime = takeoffDateTime.plus(flightLength);
-                flightsForSelectedDays.add(new Flight(flightNumber,airportCode,takeoffDateTime,landingDateTime,type));
+                flightsForSelectedDays.add(new Flight(flightNumber, airportCode, takeoffDateTime, landingDateTime, type));
             }
+            date = date.plusDays(1);
         }
-        return flights;
+        return flightsForSelectedDays;
     }
-
 
 
     public void fillPeriodWithFlights(Period period) {
