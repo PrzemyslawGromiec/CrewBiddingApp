@@ -37,11 +37,13 @@ public class FlightServiceTest {
 
     @Test
     public void fillingPeriodWithFlights() {
-        Period period = new Period(LocalDateTime.of(2023,12,12,5,0), LocalDateTime.of(2023,12,13,23,0));
+        Period period = new Period(LocalDateTime.of(2024,1,12,5,0),
+                LocalDateTime.of(2024,1,13,23,0));
         FlightService flightService = new FlightService();
 
-        flightService.fillPeriodWithFlights(period);
-        assertEquals(6, period.getFlights().size());
+        List<Flight> flights = flightService.fillPeriodWithFlights(period);
+
+        assertEquals(7, flights.size());
 
     }
 }

@@ -23,7 +23,6 @@ public class PeriodFactory {
         EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
         EventRequest firstRequest = requests.get(0);
 
-
         if (!requests.isEmpty() ) {
             if (firstRequest.getStartTime().getDayOfMonth() != 1) {
                 LocalDateTime periodStart = firstRequest.getStartTime().withDayOfMonth(1).toLocalDate().atStartOfDay();
@@ -32,7 +31,6 @@ public class PeriodFactory {
             }
             previousEventRequest = firstRequest;
         }
-
 
         for (int i = 1; i < requests.size(); i++) {
             EventRequest currentEventRequest = requests.get(i);

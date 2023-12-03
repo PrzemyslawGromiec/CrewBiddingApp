@@ -6,6 +6,7 @@ import org.example.entities.Period;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FlightService {
     private List<Flight> flights = new ArrayList<>();
@@ -21,11 +22,11 @@ public class FlightService {
                 LocalTime.of(5, 25), Duration.ofHours(11)));
         flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA190", "NCE", AircraftType.A320,
                 LocalTime.of(6, 25), Duration.ofHours(7).plusMinutes(25), EnumSet.complementOf(EnumSet.of(DayOfWeek.FRIDAY))));
+        flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA05", "HND", AircraftType.B787,
+                LocalTime.of(10, 10), Duration.ofHours(70), EnumSet.complementOf(EnumSet.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))));
 
     }
 
-    //TODO:metoda moze pominac wybrane dni tygodnia lub daty - przekazac liste dni tygodnia
-    //moze byc przeciazona metoda z lista
     public List<Flight> generateCustomRecurringFlights(String flightNumber, String airportCode, AircraftType type, LocalTime takeoffTime, Duration flightLength) {
         List<Flight> flights = new ArrayList<>();
         LocalDateTime takeoffDate = today.plusMonths(1).withDayOfMonth(1).atTime(takeoffTime);
@@ -58,8 +59,11 @@ public class FlightService {
     }
 
 
-    public void fillPeriodWithFlights(Period period) {
-
+    public List<Flight> fillPeriodWithFlights(Period period) {
+        return flights.stream()
+                .filter(flight -> !flight.getReportTime().isBefore(period.getStartTime())
+                        && !flight.getClearTime().isAfter(period.getEndTime()))
+                .collect(Collectors.toList());
     }
 
 
