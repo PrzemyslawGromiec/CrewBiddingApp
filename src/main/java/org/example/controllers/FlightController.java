@@ -18,8 +18,18 @@ public class FlightController {
 
     public List<FlightRequest> chooseFlightsForPeriods(List<Period> generatedPeriods) {
         FlightRequestFactory factory = new FlightRequestFactory();
-        Scanner scanner = new Scanner(System.in);
         for (Period generatedPeriod : generatedPeriods) {
+            chooseFlights(generatedPeriod, factory);
+        }
+
+        List<FlightRequest> requests = factory.getRequests();
+        return requests;
+    }
+
+    private void chooseFlights(Period generatedPeriod, FlightRequestFactory factory) {
+        int userChoice;
+        do {
+            Scanner scanner = new Scanner(System.in);
             List<Flight> generatedFlights = flightService.generateFlightsForPeriod(generatedPeriod);
             System.out.println("In this period: " + generatedPeriod + " flights available: ");
             for (int i = 0; i < generatedFlights.size(); i++) {
@@ -27,15 +37,20 @@ public class FlightController {
                 System.out.println("NR: " + (i + 1) + " " + generatedFlight);
             }
             System.out.println("Enter flight number you want to choose:");
-            int userChoice = scanner.nextInt();
+            System.out.println("Enter 0 to go to the next period.");
+            userChoice = scanner.nextInt();
+            if (userChoice==0) {
+                System.out.println("Moved to next period...");
+              continue;
+            }
+
             Flight choosedFlight = generatedFlights.get(userChoice - 1);
-            //TODO: zapytac o prirytet do lotu lub scalic z mozliwoscia wyboru lotu np nr1.p3
             int priority = 3;
             factory.buildRequest(choosedFlight, priority);
-        }
+            //TODO: zapytac o prirytet do lotu lub scalic z mozliwoscia wyboru lotu np nr1.p3
 
-        List<FlightRequest> requests = factory.getRequests();
-        return requests;
+        } while (userChoice != 0);
+
     }
 
 
