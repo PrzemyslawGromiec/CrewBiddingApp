@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +10,12 @@ public class Period {
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private List<Flight> flights = new ArrayList<>();
 
     public Period(LocalDateTime startTime, LocalDateTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public List<Flight> getFlights() {
-        return flights;
-    }
 
     public LocalDateTime getStartTime() {
         return startTime;
@@ -27,9 +25,16 @@ public class Period {
         return endTime;
     }
 
-    public void setFlights(List<Flight> flights) {
-        this.flights = flights;
+    public void shortenPeriod(Flight flight) {
+        Duration firstPeriod = Duration.between(this.startTime,flight.getReportTime());
+        Duration secondPeriod = Duration.between(this.endTime, flight.getClearTime());
+        if (firstPeriod.compareTo(secondPeriod) < 0) {
+            endTime = flight.getReportTime();
+        } else {
+            startTime = flight.getClearTime();
+        }
     }
+
 
     @Override
     public String toString() {

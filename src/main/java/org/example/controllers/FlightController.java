@@ -48,6 +48,8 @@ public class FlightController {
             int priority = 3;
             factory.buildRequest(choosedFlight, priority);
             //TODO: zapytac o prirytet do lotu lub scalic z mozliwoscia wyboru lotu np nr1.p3
+            generatedPeriod.shortenPeriod(choosedFlight);
+
 
         } while (userChoice != 0);
 
