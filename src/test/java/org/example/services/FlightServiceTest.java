@@ -41,7 +41,7 @@ public class FlightServiceTest {
                 LocalDateTime.of(2024,1,13,23,0));
         FlightService flightService = new FlightService();
 
-        List<Flight> flights = flightService.fillPeriodWithFlights(period);
+        List<Flight> flights = flightService.generateFlightsForPeriod(period);
 
         assertEquals(7, flights.size());
 

@@ -4,7 +4,7 @@ import org.example.entities.Event;
 import org.example.entities.EventRequest;
 import org.example.entities.Request;
 import org.example.services.PeriodFactory;
-import org.example.services.RequestFactory;
+import org.example.services.EventRequestFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MainTest {
     public static void main(String[] args) {
-        RequestFactory requestFactory = new RequestFactory();
+        EventRequestFactory eventRequestFactory = new EventRequestFactory();
         PeriodFactory periodFactory = new PeriodFactory();
         Event event1 = new Event(0,LocalDateTime.of(2023,12,12,10,15),
                 LocalDateTime.of(2023,12,13,10,45),3,"uni");
@@ -29,13 +29,12 @@ public class MainTest {
         events.add(event3);
         events.add(event4);
 
-        List<EventRequest> requests = requestFactory.createRequests(events);
+        List<EventRequest> requests = eventRequestFactory.createRequests(events);
         for (Request request : requests) {
             System.out.println(request);
         }
 
         periodFactory.createPeriodsBetweenRequests(requests);
-
 
     }
 }

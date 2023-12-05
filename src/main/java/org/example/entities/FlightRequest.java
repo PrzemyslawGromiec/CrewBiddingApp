@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 public class FlightRequest extends Request{
     private Flight flight;
+    private int numOfStars;
 
-    public FlightRequest(Flight flight) {
+    public FlightRequest(Flight flight, int numOfStars) {
         this.flight = flight;
+        this.numOfStars = numOfStars;
     }
 
     @Override
@@ -31,6 +33,6 @@ public class FlightRequest extends Request{
 
     @Override
     int getNumberOfStars() {
-        return 0;
+        return numOfStars;
     }
 }

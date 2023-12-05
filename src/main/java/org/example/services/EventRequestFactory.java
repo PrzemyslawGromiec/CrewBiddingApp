@@ -2,13 +2,12 @@ package org.example.services;
 
 import org.example.entities.Event;
 import org.example.entities.EventRequest;
-import org.example.entities.Request;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class RequestFactory {
+public class EventRequestFactory {
 
     public List<EventRequest> createRequests(List<Event> events) {
 

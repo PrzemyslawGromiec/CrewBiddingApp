@@ -4,22 +4,20 @@ import org.example.entities.Event;
 import org.example.entities.EventRequest;
 import org.example.entities.Request;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.support.HierarchyTraversalMode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RequestFactoryTest {
+class EventRequestFactoryTest {
     private static int nextId = 0;
 
     @Test
     void combineEventsTest() {
-        RequestFactory requestFactory = new RequestFactory();
+        EventRequestFactory eventRequestFactory = new EventRequestFactory();
 
         //TODO: metoda przetestuje scenariusz czy np 20 eventow dzien po dniu i je sklei do jednego
 
@@ -46,7 +44,7 @@ class RequestFactoryTest {
             System.out.println(event);
         }
 
-        List<EventRequest> requests = requestFactory.createRequests(events);
+        List<EventRequest> requests = eventRequestFactory.createRequests(events);
         for (Request request : requests) {
             System.out.println(request);
         }

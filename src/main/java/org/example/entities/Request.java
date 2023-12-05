@@ -5,7 +5,6 @@ import java.util.List;
 
 public abstract class Request {
     private int points;
-    private int numberOfStars;
 
     abstract LocalDateTime getStartTime();
 
@@ -20,10 +19,6 @@ public abstract class Request {
     abstract RequestType getType();
 
     abstract int getNumberOfStars();
-
-    public void setNumberOfStars(int numberOfStars) {
-        this.numberOfStars = numberOfStars;
-    }
 
     @Override
     public String toString() {

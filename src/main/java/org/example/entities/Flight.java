@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.PriorityQueue;
@@ -11,6 +12,7 @@ public class Flight {
     private LocalDateTime clearTime;
     private AircraftType aircraftType;
     private boolean favourite;
+
 
     public Flight(String flightNumber, String airportCode, LocalDateTime reportTime, LocalDateTime clearTime, AircraftType aircraftType) {
         this.flightNumber = flightNumber;
@@ -68,6 +70,10 @@ public class Flight {
         this.favourite = favourite;
     }
 
+    public Duration getFlightDuration() {
+        return Duration.between(reportTime,clearTime);
+    }
+
     @Override
     public String toString() {
         return "Flight{" +
@@ -77,6 +83,7 @@ public class Flight {
                 ", clearTime=" + clearTime +
                 ", aircraftType=" + aircraftType +
                 ", favourite=" + favourite +
+                ", duration=" + getFlightDuration() +
                 '}';
     }
 }

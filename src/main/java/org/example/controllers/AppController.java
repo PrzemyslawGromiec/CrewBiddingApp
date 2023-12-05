@@ -1,11 +1,7 @@
 package org.example.controllers;
 
-import org.example.entities.EventRequest;
-import org.example.entities.Flight;
-import org.example.entities.Period;
-import org.example.entities.Request;
+import org.example.entities.*;
 import org.example.repositories.EventBinRepository;
-import org.example.repositories.EventRepository;
 import org.example.services.*;
 
 import java.util.List;
@@ -18,7 +14,8 @@ public class AppController {
     private FlightService flightService;
     private ReportService reportService;
     private PeriodFactory periodFactory;
-    private RequestFactory requestFactory;
+    private EventRequestFactory eventRequestFactory;
+    private FlightController flightController;
 
 
     public AppController() {
@@ -26,7 +23,8 @@ public class AppController {
         this.flightService = new FlightService();
         this.reportService = new ReportService();
         this.periodFactory = new PeriodFactory();
-        this.requestFactory = new RequestFactory();
+        this.eventRequestFactory = new EventRequestFactory();
+        this.flightController = new FlightController(flightService);
     }
 
     public void run() {
@@ -39,10 +37,14 @@ public class AppController {
             switch (choice) {
                 case 1 -> {
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
-                    List<EventRequest> requests = requestFactory.createRequests(eventService.getEvents());
+                    List<EventRequest> requests = eventRequestFactory.createRequests(eventService.getEvents());
                     List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(requests);
                     for (Period generatedPeriod : generatedPeriods) {
                         System.out.println(generatedPeriod);
+                    }
+                    List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
+                    for (FlightRequest flightRequest : flightRequests) {
+                        System.out.println(flightRequest);
                     }
 
 
