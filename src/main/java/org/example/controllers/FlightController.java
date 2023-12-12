@@ -52,6 +52,7 @@ public class FlightController {
             if (userChoices.length == 2) {
                 int chosenFlightIndex = userChoices[0] - 1;
                 int priority = userChoices[1];
+
                 if (chosenFlightIndex >= 0 && chosenFlightIndex < generatedFlights.size()) {
                     Flight chosenFlight = generatedFlights.get(userChoices[0]);
                     factory.buildRequest(chosenFlight, priority);
@@ -68,16 +69,20 @@ public class FlightController {
     }
 
     private int[] processInput(String userInput) {
-        int selectedFlightNum = 0;
-        int selectedFlightPriority = 0;
 
         String[] userValues = userInput.split("/");
         if (userValues.length == 2 && isNumeric(userValues[0]) &&
                 isNumeric(userValues[1])) {
-            selectedFlightNum = Integer.parseInt(userValues[0]);
-            selectedFlightPriority = Integer.parseInt(userValues[1]);
+            int selectedFlightNum = Integer.parseInt(userValues[0]);
+            int selectedFlightPriority = Integer.parseInt(userValues[1]);
+
+            if (selectedFlightPriority >= 1 && selectedFlightPriority <= 3) {
+                return new int[]{selectedFlightNum, selectedFlightPriority};
+            } else {
+                System.out.println("Priority must be value between 1 and 3 only.");
+            }
         }
-        return new int[]{selectedFlightNum, selectedFlightPriority};
+        return new int[0];
     }
 
     private boolean isNumeric(String str) {
