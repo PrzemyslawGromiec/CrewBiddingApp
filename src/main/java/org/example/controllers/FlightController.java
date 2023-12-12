@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class FlightController {
     private FlightService flightService;
+    private Scanner scanner = new Scanner(System.in);
 
     public FlightController(FlightService flightService) {
         this.flightService = flightService;
@@ -27,32 +28,66 @@ public class FlightController {
     }
 
     private void chooseFlights(Period generatedPeriod, FlightRequestFactory factory) {
-        int userChoice;
+        String userInput;
+        int[] userChoices;
         do {
-            Scanner scanner = new Scanner(System.in);
+
             List<Flight> generatedFlights = flightService.generateFlightsForPeriod(generatedPeriod);
             System.out.println("In this period: " + generatedPeriod + " flights available: ");
             for (int i = 0; i < generatedFlights.size(); i++) {
                 Flight generatedFlight = generatedFlights.get(i);
                 System.out.println("NR: " + (i + 1) + " " + generatedFlight);
             }
-            System.out.println("Enter flight number you want to choose:");
+            System.out.println("Enter flight number you want to choose and its priority:");
+            System.out.println("in the format of 'flight number / priority '.");
             System.out.println("Enter 0 to go to the next period.");
-            userChoice = scanner.nextInt();
-            if (userChoice==0) {
-                System.out.println("Moved to next period...");
-              continue;
+
+            userInput = scanner.nextLine();
+            if ("0".equals(userInput.trim())) {
+                System.out.println("Moving to the next period.");
+                break;
             }
 
-            Flight choosedFlight = generatedFlights.get(userChoice - 1);
-            int priority = 3;
-            factory.buildRequest(choosedFlight, priority);
-            //TODO: zapytac o prirytet do lotu lub scalic z mozliwoscia wyboru lotu np nr1.p3
-            generatedPeriod.shortenPeriod(choosedFlight);
+            userChoices = processInput(userInput);
+            if (userChoices.length == 2) {
+                int chosenFlightIndex = userChoices[0] - 1;
+                int priority = userChoices[1];
+                if (chosenFlightIndex >= 0 && chosenFlightIndex < generatedFlights.size()) {
+                    Flight chosenFlight = generatedFlights.get(userChoices[0]);
+                    factory.buildRequest(chosenFlight, priority);
+                    generatedPeriod.shortenPeriod(chosenFlight);
+                } else {
+                    System.out.println("Invalid flight number.");
+                    System.out.println("Choose a number between 1 and " + generatedFlights.size());
+                    System.out.println("remember to enter - 'flight number / flight priority' \n");
+                }
+            }
 
+        } while (true);
 
-        } while (userChoice != 0);
+    }
 
+    private int[] processInput(String userInput) {
+        int selectedFlightNum = 0;
+        int selectedFlightPriority = 0;
+
+        String[] userValues = userInput.split("/");
+        if (userValues.length == 2 && isNumeric(userValues[0]) &&
+                isNumeric(userValues[1])) {
+            selectedFlightNum = Integer.parseInt(userValues[0]);
+            selectedFlightPriority = Integer.parseInt(userValues[1]);
+        }
+        return new int[]{selectedFlightNum, selectedFlightPriority};
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("Value is not a number!");
+            return false;
+        }
     }
 
 

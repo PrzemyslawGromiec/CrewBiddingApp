@@ -1,10 +1,8 @@
 package org.example.entities;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Period {
 
@@ -35,12 +33,17 @@ public class Period {
         }
     }
 
+    public Duration periodDuration() {
+        return Duration.between(startTime,endTime);
+    }
+
 
     @Override
     public String toString() {
         return "Period{" +
                 "startTime = " + startTime +
                 ", endTime = " + endTime +
+                ", duration: " + periodDuration() +
                 '}';
     }
 }

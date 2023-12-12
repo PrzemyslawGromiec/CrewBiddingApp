@@ -25,11 +25,11 @@ public class FlightService {
         flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA05", "HND", AircraftType.B787,
                 LocalTime.of(10, 10), Duration.ofHours(70), EnumSet.complementOf(EnumSet.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))));
         flights.addAll(generateCustomRecurringFlights("BA15", "SIN", AircraftType.B787, LocalTime.of(10, 5),
-                Duration.ofHours(24)));
+                Duration.ofHours(46)));
         flights.addAll(generateCustomRecurringFlights("BA220", "BDA", AircraftType.B777,
-                LocalTime.of(13, 30), Duration.ofHours(26)));
+                LocalTime.of(13, 30), Duration.ofHours(40)));
         flights.addAll(generateCustomRecurringFlights("BA224", "YYZ", AircraftType.B777,
-                LocalTime.of(11, 30), Duration.ofHours(28)));
+                LocalTime.of(11, 30), Duration.ofHours(42)));
 
     }
 
