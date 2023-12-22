@@ -43,8 +43,14 @@ public class AppController {
                         System.out.println(generatedPeriod);
                     }
                     List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
+                    System.out.println();
+                    System.out.println("Your flight requests:");
                     for (FlightRequest flightRequest : flightRequests) {
                         System.out.println(flightRequest);
+                    }
+                    System.out.println("Your event requests:");
+                    for (EventRequest request : requests) {
+                        System.out.println(request);
                     }
 
 
@@ -79,6 +85,7 @@ public class AppController {
         System.out.println("3. Add your current trainings.");
         System.out.println("4. End the application.");
     }
+
 
     private void modifyRequests() {
         eventService.showEvents();

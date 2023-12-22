@@ -1,20 +1,15 @@
 package org.example.controllers;
 
 import org.example.entities.Flight;
+import org.example.entities.FlightRequest;
 import org.example.entities.Period;
 import org.example.services.FlightRequestFactory;
 import org.example.services.FlightService;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Scanner;
-
-//TODO: krotki lot moze byc tylko przed dlugim z zachowaniem 16h przerwy
-//jesli wybierzemy najpierw dlugi lot, to przerwa przed kolejnym lotem, to min 2 dni
-//przerwa pomiedzy krotkimi lotami to 12.5h
-
-//metoda shorten do poprawy
-//wyswietlanie gdy w okresie nie miesci sie juz zaden lot
-
+import java.util.stream.Collectors;
 
 public class FlightPeriodController {
     private Scanner scanner = new Scanner(System.in);
@@ -25,22 +20,42 @@ public class FlightPeriodController {
         this.flightService = flightService;
     }
 
-    void chooseFlight(Period generatedPeriod, FlightRequestFactory factory) {
+    Flight chooseFlight(Period generatedPeriod, FlightRequestFactory factory) {
         generatedFlights = flightService.generateFlightsForPeriod(generatedPeriod);
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
         if (flightChoice.noFlightsChosen()) {
             System.out.println("Moving to the next period.");
-            return;
+            return null; //todo return null
         }
 
         Flight chosenFlight = generatedFlights.get(flightChoice.getChosenFlightIndex());
+        System.out.println("Chosen flight:");
+        System.out.println(chosenFlight);
+        displayFlightInfoLimits(chosenFlight);
         factory.buildRequest(chosenFlight,flightChoice.getPriority());
+        return chosenFlight;
+    }
+
+    public List<Flight> getFlightsForPeriod(Period period) {
+        return flightService.getFlightsForPeriod(period);
+    }
+
+    private void displayFlightInfoLimits(Flight flight) {
+        System.out.println("Required break before next flight: " + getRequiredBreakBeforeNextFlight(flight));
+    }
+
+    private Duration getRequiredBreakBeforeNextFlight(Flight flight) {
+        if (flight.getFlightDuration().toHours() > 14) {
+            return Duration.ofDays(2);
+        } else {
+            return Duration.ofHours(12).plusMinutes(30);
+        }
     }
 
 
-   private class FlightChoice {
+    private class FlightChoice {
         private int priority;
         private int chosenFlightIndex;
         private boolean valid;
@@ -80,7 +95,7 @@ public class FlightPeriodController {
             if (selectedFlightPriority < 1 || selectedFlightPriority > 3) {
                 throw new IllegalArgumentException("Priority must be value between 1 and 3 only.");
             }
-            if (chosenFlightIndex >= 0 && chosenFlightIndex < generatedFlights.size()) {
+            if (chosenFlightIndex < 0  || chosenFlightIndex > generatedFlights.size()) {
                 throw new IllegalArgumentException("Index out of flights list");
             }
             return new int[]{selectedFlightNum, selectedFlightPriority};
@@ -136,4 +151,7 @@ public class FlightPeriodController {
         }
     }
 
+    public List<Flight> getGeneratedFlights() {
+        return generatedFlights;
+    }
 }
