@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FlightController {
@@ -39,14 +40,15 @@ public class FlightController {
             return;
         }
 
-        Flight selectedFlight = periodController.chooseFlight(period, factory);
+        Optional<Flight> selectedFlight = periodController.chooseFlight(period, factory);
 
-        if (selectedFlight == null) {
+        //selectedFlight.ifPresent(flight -> System.out.println("No flight selected"));
+        if (selectedFlight.isEmpty()) {
             System.out.println("No flight selected for this period.");
             return;
         }
 
-        List<Period> newCreatedPeriods = period.splitPeriodAroundSelectedFlight(selectedFlight);
+        List<Period> newCreatedPeriods = period.splitPeriodAroundSelectedFlight(selectedFlight.orElseThrow());
 
         processSinglePeriod(newCreatedPeriods.get(0), factory);
         processSinglePeriod(newCreatedPeriods.get(1),factory);

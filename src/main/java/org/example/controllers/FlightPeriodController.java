@@ -8,6 +8,7 @@ import org.example.services.FlightService;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -20,14 +21,14 @@ public class FlightPeriodController {
         this.flightService = flightService;
     }
 
-    Flight chooseFlight(Period generatedPeriod, FlightRequestFactory factory) {
+    Optional<Flight> chooseFlight(Period generatedPeriod, FlightRequestFactory factory) {
         generatedFlights = flightService.generateFlightsForPeriod(generatedPeriod);
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
         if (flightChoice.noFlightsChosen()) {
             System.out.println("Moving to the next period.");
-            return null; //todo return null
+            return Optional.empty();
         }
 
         Flight chosenFlight = generatedFlights.get(flightChoice.getChosenFlightIndex());
@@ -35,7 +36,7 @@ public class FlightPeriodController {
         System.out.println(chosenFlight);
         displayFlightInfoLimits(chosenFlight);
         factory.buildRequest(chosenFlight, flightChoice.getPriority());
-        return chosenFlight;
+        return Optional.of(chosenFlight);
     }
 
     private void displayFlightInfoLimits(Flight flight) {

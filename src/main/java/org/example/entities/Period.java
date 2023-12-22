@@ -16,23 +16,12 @@ public class Period {
         this.endTime = endTime;
     }
 
-
     public LocalDateTime getStartTime() {
         return startTime;
     }
 
     public LocalDateTime getEndTime() {
         return endTime;
-    }
-
-    public void shortenPeriod(Flight flight) {
-        Duration firstPeriod = Duration.between(this.startTime, flight.getReportTime());
-        Duration secondPeriod = Duration.between(this.endTime, flight.getClearTime());
-        if (firstPeriod.compareTo(secondPeriod) < 0) {
-            endTime = flight.getReportTime();
-        } else {
-            startTime = flight.getClearTime();
-        }
     }
 
     public List<Period> splitPeriodAroundSelectedFlight(Flight flight) {
