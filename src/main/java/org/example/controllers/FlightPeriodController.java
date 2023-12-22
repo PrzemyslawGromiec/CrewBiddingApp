@@ -34,12 +34,8 @@ public class FlightPeriodController {
         System.out.println("Chosen flight:");
         System.out.println(chosenFlight);
         displayFlightInfoLimits(chosenFlight);
-        factory.buildRequest(chosenFlight,flightChoice.getPriority());
+        factory.buildRequest(chosenFlight, flightChoice.getPriority());
         return chosenFlight;
-    }
-
-    public List<Flight> getFlightsForPeriod(Period period) {
-        return flightService.getFlightsForPeriod(period);
     }
 
     private void displayFlightInfoLimits(Flight flight) {

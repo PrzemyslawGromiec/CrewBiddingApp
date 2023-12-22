@@ -14,8 +14,10 @@ import java.util.stream.Collectors;
 
 public class FlightController {
     private FlightPeriodController periodController;
+    private FlightService flightService;
 
     public FlightController(FlightService flightService) {
+        this.flightService = flightService;
         periodController = new FlightPeriodController(flightService);
     }
 
@@ -29,32 +31,26 @@ public class FlightController {
     }
 
     private void processSinglePeriod(Period initialPeriod, FlightRequestFactory factory) {
-        List<Period> periodsToProcess = new ArrayList<>();
-        periodsToProcess.add(initialPeriod);
+        Period currentPeriod = initialPeriod;
+        System.out.println("Processing period: " + currentPeriod);
 
-        while (!periodsToProcess.isEmpty()) {
-            Period currentPeriod = periodsToProcess.remove(0);
-            System.out.println("Processing period: " + currentPeriod);
-
-            List<Flight> flightsForCurrentPeriod = periodController.getFlightsForPeriod(currentPeriod); //todo refactor
-
-            Flight selectedFlight = periodController.chooseFlight(currentPeriod, factory);
-           // List<Flight> flightsAvailable = getPossibleNextFlights(selectedFlight, flightsForCurrentPeriod);
-
-            if (selectedFlight == null) {
-                System.out.println("No more flights to fill that period.");
-                continue;
-            }
-            List<Period> newCreatedPeriods = currentPeriod.splitPeriodAroundSelectedFlight(selectedFlight);
-            for (Period newPeriod : newCreatedPeriods) {
-                if (hasAvailableFlightsInThisPeriod(newPeriod, flightsForCurrentPeriod)) {
-                    periodsToProcess.add(newPeriod);
-                } else {
-                    System.out.println("You cannot accommodate any more flights in this period:");
-                    System.out.println(newPeriod);
-                }
-            }
+        List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(currentPeriod); //todo refactor
+        if (flightsForCurrentPeriod.isEmpty()) {
+            System.out.println("No flights for this period");
+            return;
         }
+
+        Flight selectedFlight = periodController.chooseFlight(currentPeriod, factory);
+
+        if (selectedFlight == null) {
+            System.out.println("No flight selected for this period.");
+            return;
+        }
+
+        List<Period> newCreatedPeriods = currentPeriod.splitPeriodAroundSelectedFlight(selectedFlight);
+
+        processSinglePeriod(newCreatedPeriods.get(0), factory);
+        processSinglePeriod(newCreatedPeriods.get(1),factory);
     }
 
     private boolean hasAvailableFlightsInThisPeriod(Period currentPeriod, List<Flight> flights) {
@@ -89,3 +85,11 @@ public class FlightController {
 
 
 }
+
+/*
+ *     |
+ *    /\
+ *   /\/\
+ *
+ *
+ * */
