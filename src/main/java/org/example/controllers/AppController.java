@@ -16,6 +16,7 @@ public class AppController {
     private PeriodFactory periodFactory;
     private EventRequestFactory eventRequestFactory;
     private FlightController flightController;
+    private RequestService requestService;
 
 
     public AppController() {
@@ -24,7 +25,8 @@ public class AppController {
         this.reportService = new ReportService();
         this.periodFactory = new PeriodFactory();
         this.eventRequestFactory = new EventRequestFactory();
-        this.flightController = new FlightController(flightService);
+        this.requestService = new RequestService();
+        this.flightController = new FlightController(flightService, requestService);
     }
 
     public void run() {

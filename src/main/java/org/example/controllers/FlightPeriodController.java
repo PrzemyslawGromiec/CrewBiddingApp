@@ -1,28 +1,21 @@
 package org.example.controllers;
 
 import org.example.entities.Flight;
-import org.example.entities.FlightRequest;
 import org.example.entities.Period;
-import org.example.services.FlightRequestFactory;
 import org.example.services.FlightService;
+import org.example.services.RequestService;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class FlightPeriodController {
     private Scanner scanner = new Scanner(System.in);
-    private FlightService flightService;
     private List<Flight> generatedFlights;
 
-    public FlightPeriodController(FlightService flightService) {
-        this.flightService = flightService;
-    }
-
-    Optional<Flight> chooseFlight(Period generatedPeriod, FlightRequestFactory factory) {
-        generatedFlights = flightService.generateFlightsForPeriod(generatedPeriod);
+    Optional<Flight> chooseFlight(RequestService requestService, List<Flight> availableFlights) {
+        generatedFlights = availableFlights;
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
@@ -35,21 +28,14 @@ public class FlightPeriodController {
         System.out.println("Chosen flight:");
         System.out.println(chosenFlight);
         displayFlightInfoLimits(chosenFlight);
-        factory.buildRequest(chosenFlight, flightChoice.getPriority());
+        requestService.buildRequest(chosenFlight, flightChoice.getPriority());
         return Optional.of(chosenFlight);
     }
 
     private void displayFlightInfoLimits(Flight flight) {
-        System.out.println("Required break before next flight: " + getRequiredBreakBeforeNextFlight(flight));
+        System.out.println("Required break before next flight: " + flight.calculateBuffer());
     }
 
-    private Duration getRequiredBreakBeforeNextFlight(Flight flight) {
-        if (flight.getFlightDuration().toHours() > 14) {
-            return Duration.ofDays(2);
-        } else {
-            return Duration.ofHours(12).plusMinutes(30);
-        }
-    }
 
 
     private class FlightChoice {

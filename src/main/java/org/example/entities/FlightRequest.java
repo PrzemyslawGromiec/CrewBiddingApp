@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class FlightRequest extends Request{
@@ -35,4 +36,10 @@ public class FlightRequest extends Request{
     int getNumberOfStars() {
         return numOfStars;
     }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+
 }

@@ -8,6 +8,10 @@ import java.util.List;
 
 public class FlightRequestFactory {
     private List<FlightRequest> requests = new ArrayList<>();
+
+    public FlightRequestFactory() {
+    }
+
     public void buildRequest(Flight chosenFlight, int priority) {
         FlightRequest flightRequest = new FlightRequest(chosenFlight,priority);
         requests.add(flightRequest);

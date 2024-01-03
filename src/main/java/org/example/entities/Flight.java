@@ -71,8 +71,30 @@ public class Flight {
     }
 
     public Duration getFlightDuration() {
-        return Duration.between(reportTime,clearTime);
+        return Duration.between(reportTime, clearTime);
     }
+
+    public Duration getFlightDurationWithBuffer() {
+        return getFlightDuration().plus(calculateBuffer());
+    }
+
+    public LocalDateTime getClearTimeWithBuffer() {
+        return getClearTime().plus(calculateBuffer());
+    }
+
+    //
+    public boolean isValidFlightInPeriod(Flight flight) {
+        return getClearTimeWithBuffer().isBefore(flight.getReportTime()) || flight.getClearTimeWithBuffer().isBefore(getReportTime());
+    }
+
+    public Duration calculateBuffer() {
+        if (getFlightDuration().compareTo(Duration.ofHours(14)) < 0) {
+            return Duration.ofHours(12).plusMinutes(30);
+        } else {
+            return Duration.ofHours(48);
+        }
+    }
+
 
     @Override
     public String toString() {
