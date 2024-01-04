@@ -38,7 +38,6 @@ public class FlightService {
                 LocalTime.of(13, 30), Duration.ofHours(40)));
         flights.addAll(generateCustomRecurringFlights("BA224", "YYZ", AircraftType.B777,
                 LocalTime.of(11, 30), Duration.ofHours(42)));
-        flights.forEach(System.out::println);
 
     }
 

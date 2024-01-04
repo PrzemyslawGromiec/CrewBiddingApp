@@ -14,8 +14,6 @@ public class EventService {
     private List<Event> events;
     private EventRepository eventRepository;
 
-    //TODO:eventService da okresy, controller przekaze je do flightService, zeby dal loty w tych okresach
-
     public EventService(EventRepository eventRepository) {
         this.events = eventRepository.getEvents();
         this.eventRepository = eventRepository;

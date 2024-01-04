@@ -82,7 +82,6 @@ public class Flight {
         return getClearTime().plus(calculateBuffer());
     }
 
-    //
     public boolean isValidFlightInPeriod(Flight flight) {
         return getClearTimeWithBuffer().isBefore(flight.getReportTime()) || flight.getClearTimeWithBuffer().isBefore(getReportTime());
     }

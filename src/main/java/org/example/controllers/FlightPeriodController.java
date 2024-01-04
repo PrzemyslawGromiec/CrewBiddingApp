@@ -1,11 +1,8 @@
 package org.example.controllers;
 
 import org.example.entities.Flight;
-import org.example.entities.Period;
-import org.example.services.FlightService;
 import org.example.services.RequestService;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -35,8 +32,6 @@ public class FlightPeriodController {
     private void displayFlightInfoLimits(Flight flight) {
         System.out.println("Required break before next flight: " + flight.calculateBuffer());
     }
-
-
 
     private class FlightChoice {
         private int priority;
