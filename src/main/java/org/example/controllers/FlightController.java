@@ -40,12 +40,7 @@ public class FlightController {
         }
 
         List<Flight> availableFlights = requestService.filterBuffer(flightsForCurrentPeriod, period);
-        //period 3.01-8.01 - wybieram loty
-        //dlugi lot - 2 dni wolnego
-        //7.01 - dlugi lot, 8.01 20:00 - 2 dni wolnego
-        //EventRequsest - co jesli on ma 1 dzien?
-        //period - 10.01
-        //9.01 - event request - day off
+
         Optional<Flight> selectedFlight = periodController.chooseFlight(requestService, availableFlights);
 
         //selectedFlight.ifPresent(flight -> System.out.println("No flight selected"));

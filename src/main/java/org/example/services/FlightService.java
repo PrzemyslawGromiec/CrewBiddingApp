@@ -14,6 +14,12 @@ public class FlightService {
 
     public FlightService() {
         this.today = LocalDate.now();
+        flights.addAll(generateCustomRecurringFlights("BA456", "MAD", AircraftType.A320,
+                LocalTime.of(5, 5), Duration.ofHours(7).plusMinutes(25)));
+        flights.addAll(generateCustomRecurringFlights("BA710", "ZRH", AircraftType.A319,
+                LocalTime.of(5, 15), Duration.ofHours(6).plusMinutes(25)));
+        flights.addAll(generateCustomRecurringFlights("BA328", "CDG", AircraftType.A320,
+                LocalTime.of(5, 20), Duration.ofHours(7).plusMinutes(25)));
         flights.addAll(generateCustomRecurringFlights("BA210", "WAW", AircraftType.A320,
                 LocalTime.of(10, 30), Duration.ofHours(10)));
         flights.addAll(generateCustomRecurringFlights("BA150", "FRA", AircraftType.A320,
@@ -22,6 +28,8 @@ public class FlightService {
                 LocalTime.of(5, 25), Duration.ofHours(11)));
         flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA190", "NCE", AircraftType.A320,
                 LocalTime.of(6, 25), Duration.ofHours(7).plusMinutes(25), EnumSet.complementOf(EnumSet.of(DayOfWeek.FRIDAY))));
+        flights.addAll(generateCustomRecurringFlights("BA582", "VCE", AircraftType.A320,
+                LocalTime.of(12, 20), Duration.ofHours(7).plusMinutes(25)));
         flights.addAll(generateCustomRecurringFlightsForSelectedDays("BA05", "HND", AircraftType.B787,
                 LocalTime.of(10, 10), Duration.ofHours(70), EnumSet.complementOf(EnumSet.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))));
         flights.addAll(generateCustomRecurringFlights("BA15", "SIN", AircraftType.B787, LocalTime.of(10, 5),
@@ -30,7 +38,7 @@ public class FlightService {
                 LocalTime.of(13, 30), Duration.ofHours(40)));
         flights.addAll(generateCustomRecurringFlights("BA224", "YYZ", AircraftType.B777,
                 LocalTime.of(11, 30), Duration.ofHours(42)));
-        flights.forEach(flight -> System.out.println(flight));
+        flights.forEach(System.out::println);
 
     }
 
