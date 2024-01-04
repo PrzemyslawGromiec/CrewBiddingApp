@@ -53,5 +53,6 @@ public class EventBinRepository implements EventRepository{
     public int getNextId() {
         return nextId++;
     }
+
 }
 

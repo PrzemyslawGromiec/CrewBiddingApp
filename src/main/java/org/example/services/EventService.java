@@ -1,7 +1,6 @@
 package org.example.services;
 
 import org.example.entities.Event;
-import org.example.entities.Period;
 import org.example.repositories.EventRepository;
 
 import java.time.*;
@@ -163,6 +162,7 @@ public class EventService {
         System.out.println("Enter event ID number to delete from database:");
         int userInput = getValidOption();
         if (events.removeIf(event -> event.getId() == userInput)) {
+            eventRepository.saveEvents(events);
             System.out.println("Event deleted successfully.");
         } else {
             System.out.println("Event with that ID number doesn't exist.");
