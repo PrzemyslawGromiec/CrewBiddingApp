@@ -44,6 +44,7 @@ public class AppController {
                     for (Period generatedPeriod : generatedPeriods) {
                         System.out.println(generatedPeriod);
                     }
+                    System.out.println();
                     List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
                     System.out.println();
                     System.out.println("Your flight requests:");
@@ -54,6 +55,7 @@ public class AppController {
                     for (EventRequest request : requests) {
                         System.out.println(request);
                     }
+                    requestService.calculatePointsForRequest();
 
 
                     // - wyswietlenie eventRequestow i pytanie uzytkownika czy sie zgadza

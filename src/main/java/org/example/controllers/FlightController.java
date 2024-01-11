@@ -26,7 +26,7 @@ public class FlightController {
         for (Period generatedPeriod : generatedPeriods) {
             processSinglePeriod(generatedPeriod);
         }
-        return requestService.getRequests();
+        return requestService.getFlightRequests();
     }
 
     private void processSinglePeriod(Period period) {

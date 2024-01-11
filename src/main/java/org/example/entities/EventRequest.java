@@ -34,7 +34,7 @@ public class EventRequest extends Request {
     }
 
     @Override
-    int getNumberOfStars() {
+    public int getNumberOfStars() {
         return events.get(0).getPriority();
     }
 

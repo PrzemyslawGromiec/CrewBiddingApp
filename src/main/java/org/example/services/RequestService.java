@@ -1,9 +1,6 @@
 package org.example.services;
 
-import org.example.entities.EventRequest;
-import org.example.entities.Flight;
-import org.example.entities.FlightRequest;
-import org.example.entities.Period;
+import org.example.entities.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,30 +9,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RequestService {
-    private FlightRequestFactory factory = new FlightRequestFactory();
-    private List<EventRequest> eventRequests = new ArrayList<>();
+    private FlightRequestFactory flightFactory = new FlightRequestFactory();
+    private EventRequestFactory eventFactory = new EventRequestFactory();
 
 
-    public List<FlightRequest> getRequests() {
-        return factory.getRequests();
+    public List<FlightRequest> getFlightRequests() {
+        return flightFactory.getRequests();
+    }
+
+    public List<EventRequest> getEventRequests() {
+        return eventFactory.getRequests();
     }
 
     public void buildRequest(Flight chosenFlight, int priority) {
-        factory.buildRequest(chosenFlight, priority);
+        flightFactory.buildRequest(chosenFlight, priority);
     }
 
     public List<Flight> filterBuffer(List<Flight> flightsForCurrentPeriod, Period period) {
-        //dla każdego lotu
-        //sprawdzam wszystkie loty z requestów
-        //wyliczam ich pełny czas + ich bufor / pobieram - flight requests
-        //sprawdzam czy przeglądany lot koliduje z tym okresem
-        //jeśli koliduje to nie dodaje go do finalnej listy
         List<Flight> availableFlights = new ArrayList<>();
         flightsForCurrentPeriod = flightsAfterDayOff(flightsForCurrentPeriod, period);
 
         for (Flight flight : flightsForCurrentPeriod) {
             boolean isValid = true;
-            for (FlightRequest chosenFlightRequest : factory.getRequests()) {
+            for (FlightRequest chosenFlightRequest : flightFactory.getRequests()) {
                 boolean validFlightInPeriod = chosenFlightRequest.getFlight().isValidFlightInPeriod(flight);
                 if (!validFlightInPeriod) {
                     isValid = false;
@@ -60,6 +56,50 @@ public class RequestService {
         return flights.stream()
                 .filter(flight -> flight.getReportTime().isAfter(six))
                 .sorted(Comparator.comparing(Flight::getReportTime))
+                .collect(Collectors.toList());
+    }
+
+    public List<PointsReport> calculatePointsForRequest() {
+        //policzyc punkty dla EventRequest i dla FlightRequest
+        //EventRequest powinien miec wieksze priority
+        int points = 200;
+        //TODO: kazdy EventRequest to lista eventow, problem z priority
+        List<EventRequest> eventRequests = eventsSortedByPoints();
+        List<FlightRequest> flightRequests = flightsSortedByPoints();
+        List<PointsReport> pointsReports = new ArrayList<>();
+
+        for (EventRequest eventRequest : eventRequests) {
+            int calculatedPoints = points - 10;
+            PointsReport report = new PointsReport(eventRequest.getStartTime().toString(), calculatedPoints);
+            pointsReports.add(report);
+            points = calculatedPoints;
+            System.out.println(report.getRequestType() + " : " + report.getPoints());
+        }
+
+        points -= 10;
+
+        for (FlightRequest request : flightRequests) {
+            int calculatedPoints = points - 10;
+            PointsReport report = new PointsReport(request.getFlight().toString(), calculatedPoints);
+            pointsReports.add(report);
+            points = calculatedPoints;
+            System.out.println(report.getRequestType() + " : " + report.getPoints());
+        }
+
+        return pointsReports;
+    }
+
+    public List<FlightRequest> flightsSortedByPoints() {
+        return getFlightRequests().stream()
+                .sorted(Comparator.comparing(FlightRequest::getNumberOfStars)
+                        .reversed())
+                .collect(Collectors.toList());
+    }
+
+    public List<EventRequest> eventsSortedByPoints() {
+        return getEventRequests().stream()
+                .sorted(Comparator.comparing(EventRequest::getNumberOfStars)
+                        .reversed())
                 .collect(Collectors.toList());
     }
 

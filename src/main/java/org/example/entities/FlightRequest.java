@@ -33,7 +33,7 @@ public class FlightRequest extends Request{
     }
 
     @Override
-    int getNumberOfStars() {
+    public int getNumberOfStars() {
         return numOfStars;
     }
 

@@ -13,6 +13,10 @@ public class FlightPeriodController {
 
     Optional<Flight> chooseFlight(RequestService requestService, List<Flight> availableFlights) {
         generatedFlights = availableFlights;
+        //nie wyswietla zbednych komunikatow gdy lista jest pusta
+        if (availableFlights.isEmpty()) {
+            return Optional.empty();
+        }
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
