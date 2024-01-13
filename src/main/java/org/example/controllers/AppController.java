@@ -14,7 +14,7 @@ public class AppController {
     private FlightService flightService;
     private ReportService reportService;
     private PeriodFactory periodFactory;
-    private EventRequestFactory eventRequestFactory;
+    //private EventRequestFactory eventRequestFactory;
     private FlightController flightController;
     private RequestService requestService;
 
@@ -22,11 +22,11 @@ public class AppController {
     public AppController() {
         this.eventService = new EventService(new EventBinRepository());
         this.flightService = new FlightService();
-        this.reportService = new ReportService();
         this.periodFactory = new PeriodFactory();
-        this.eventRequestFactory = new EventRequestFactory();
+        //this.eventRequestFactory = new EventRequestFactory();
         this.requestService = new RequestService();
         this.flightController = new FlightController(flightService, requestService);
+        this.reportService = new ReportService(requestService);
     }
 
     public void run() {
@@ -39,7 +39,10 @@ public class AppController {
             switch (choice) {
                 case 1 -> {
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
-                    List<EventRequest> requests = eventRequestFactory.createRequests(eventService.getEvents());
+                    //List<EventRequest> requests = eventRequestFactory.createRequests(eventService.getEvents());
+                    //todo: wyglada na to jakby lista byla pusta, uzywam requestService, bo korzysta on juz z EventRequestFacory
+                    //ale wylada na to jakby nigdzie te eventy nie byly zapisywane
+                    List<EventRequest> requests = requestService.getEventRequests();
                     List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(requests);
                     for (Period generatedPeriod : generatedPeriods) {
                         System.out.println(generatedPeriod);
@@ -55,7 +58,9 @@ public class AppController {
                     for (EventRequest request : requests) {
                         System.out.println(request);
                     }
-                    requestService.calculatePointsForRequest();
+                    reportService.calculatePointsForRequest();
+
+
 
 
                     // - wyswietlenie eventRequestow i pytanie uzytkownika czy sie zgadza

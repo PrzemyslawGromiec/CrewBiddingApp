@@ -11,8 +11,6 @@ public class EventRequestFactory {
     private List<EventRequest> requests = new ArrayList<>();
 
     public List<EventRequest> createRequests(List<Event> events) {
-
-        //List<EventRequest> requests = new ArrayList<>();
         events.sort(Comparator.comparing(Event::getStart));
         List<List<Event>> groupedEvents = new ArrayList<>();
 

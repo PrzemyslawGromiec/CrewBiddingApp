@@ -59,48 +59,6 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    public List<PointsReport> calculatePointsForRequest() {
-        //policzyc punkty dla EventRequest i dla FlightRequest
-        //EventRequest powinien miec wieksze priority
-        int points = 200;
-        //TODO: kazdy EventRequest to lista eventow, problem z priority
-        List<EventRequest> eventRequests = eventsSortedByPoints();
-        List<FlightRequest> flightRequests = flightsSortedByPoints();
-        List<PointsReport> pointsReports = new ArrayList<>();
 
-        for (EventRequest eventRequest : eventRequests) {
-            int calculatedPoints = points - 10;
-            PointsReport report = new PointsReport(eventRequest.getStartTime().toString(), calculatedPoints);
-            pointsReports.add(report);
-            points = calculatedPoints;
-            System.out.println(report.getRequestType() + " : " + report.getPoints());
-        }
-
-        points -= 10;
-
-        for (FlightRequest request : flightRequests) {
-            int calculatedPoints = points - 10;
-            PointsReport report = new PointsReport(request.getFlight().toString(), calculatedPoints);
-            pointsReports.add(report);
-            points = calculatedPoints;
-            System.out.println(report.getRequestType() + " : " + report.getPoints());
-        }
-
-        return pointsReports;
-    }
-
-    public List<FlightRequest> flightsSortedByPoints() {
-        return getFlightRequests().stream()
-                .sorted(Comparator.comparing(FlightRequest::getNumberOfStars)
-                        .reversed())
-                .collect(Collectors.toList());
-    }
-
-    public List<EventRequest> eventsSortedByPoints() {
-        return getEventRequests().stream()
-                .sorted(Comparator.comparing(EventRequest::getNumberOfStars)
-                        .reversed())
-                .collect(Collectors.toList());
-    }
 
 }

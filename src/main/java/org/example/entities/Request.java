@@ -18,7 +18,7 @@ public abstract class Request {
 
     abstract RequestType getType();
 
-    abstract int getNumberOfStars();
+    public abstract int getNumberOfStars();
 
     @Override
     public String toString() {
