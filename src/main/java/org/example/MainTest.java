@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainTest {
+/*public class MainTest {
     public static void main(String[] args) {
         EventRequestFactory eventRequestFactory = new EventRequestFactory();
         PeriodFactory periodFactory = new PeriodFactory();
@@ -37,4 +37,4 @@ public class MainTest {
         periodFactory.createPeriodsBetweenRequests(requests);
 
     }
-}
+}*/

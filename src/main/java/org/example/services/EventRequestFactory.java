@@ -41,4 +41,5 @@ public class EventRequestFactory {
     public List<EventRequest> getRequests() {
         return requests;
     }
+
 }

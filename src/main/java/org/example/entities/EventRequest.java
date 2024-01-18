@@ -41,4 +41,11 @@ public class EventRequest extends Request {
     public List<Event> getEvents() {
         return events;
     }
+
+    @Override
+    public String toString() {
+        return "EventRequest{" +
+                "events=" + events +
+                '}';
+    }
 }

@@ -41,5 +41,11 @@ public class FlightRequest extends Request{
         return flight;
     }
 
-
+    @Override
+    public String toString() {
+        return "FlightRequest{" +
+                "flight=" + flight +
+                ", numOfStars=" + numOfStars +
+                '}';
+    }
 }

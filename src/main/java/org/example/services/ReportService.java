@@ -17,45 +17,39 @@ public class ReportService {
      * max points: 200, min points: 10, odstep 10 points pomiedzy requestami
      *
      * */
-    private List<EventRequest> eventRequests;
-    private List<FlightRequest> flightRequests;
     private RequestService requestService;
 
 
     public ReportService(RequestService requestService) {
         this.requestService = requestService;
-        this.eventRequests = requestService.getEventRequests();
-        this.flightRequests = requestService.getFlightRequests();
     }
 
-    public void calculatePointsForRequest() {
+   /* public void calculatePointsForRequest() {
         //policzyc punkty dla EventRequest i dla FlightRequest
         //EventRequest powinien miec wieksze priority
         int points = 200;
-      /*  List<EventRequest> eventRequests = requestService.getEventRequests();
-        List<FlightRequest> flightRequests = requestService.getFlightRequests();*/
+      *//*  List<EventRequest> eventRequests = requestService.getEventRequests();
+        List<FlightRequest> flightRequests = requestService.getFlightRequests();*//*
         List<Request> allRequestsSortedByStars = requestSortedByStars();
+        System.out.println("linijka przed sortowaniem");
         allRequestsSortedByStars.forEach(System.out::println);
+        System.out.println("cos printuje");
 
 
-    }
+    }*/
 
     public Report finalizedReport(List<FlightRequest> flightRequests, List<EventRequest> eventRequests) {
-
+        List<Request> requests = requestSortedByStars(flightRequests, eventRequests);
+        for (Request request : requests) {
+            System.out.println(request);
+        }
         return null;
     }
 
-    /*    public List<Request> requestSortedByStars() {
-            return allRequests.stream()
-                    .sorted(Comparator.comparing(Request::getNumberOfStars)
-                            .reversed())
-                    .collect(Collectors.toList());
-        }*/
-    public List<Request> requestSortedByStars() {
-
+    public List<Request> requestSortedByStars(List<FlightRequest> flightRequests, List<EventRequest> eventRequests) {
         List<Request> allRequests = new ArrayList<>();
-        allRequests.addAll(eventRequests);
         allRequests.addAll(flightRequests);
+        allRequests.addAll(eventRequests);
         return allRequests.stream()
                 .sorted(Comparator.comparing(Request::getNumberOfStars)
                         .reversed()).toList();

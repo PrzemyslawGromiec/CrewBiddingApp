@@ -3,19 +3,14 @@ package org.example.services;
 import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.example.entities.Period;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RequestServiceTest {
-    private RequestService requestService = new RequestService();
+    private RequestService requestService = new RequestService(eventService);
 
 
     @Test

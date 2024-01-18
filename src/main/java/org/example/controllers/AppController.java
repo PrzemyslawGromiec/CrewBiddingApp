@@ -14,7 +14,6 @@ public class AppController {
     private FlightService flightService;
     private ReportService reportService;
     private PeriodFactory periodFactory;
-    //private EventRequestFactory eventRequestFactory;
     private FlightController flightController;
     private RequestService requestService;
 
@@ -23,8 +22,7 @@ public class AppController {
         this.eventService = new EventService(new EventBinRepository());
         this.flightService = new FlightService();
         this.periodFactory = new PeriodFactory();
-        //this.eventRequestFactory = new EventRequestFactory();
-        this.requestService = new RequestService();
+        this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);
         this.reportService = new ReportService(requestService);
     }
@@ -39,26 +37,30 @@ public class AppController {
             switch (choice) {
                 case 1 -> {
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
-                    //List<EventRequest> requests = eventRequestFactory.createRequests(eventService.getEvents());
-                    //todo: wyglada na to jakby lista byla pusta, uzywam requestService, bo korzysta on juz z EventRequestFacory
+                    //List<EventRequest> eventRequests = eventRequestFactory.createRequests(eventService.getEvents());
+                    //List<Event> events = eventService.getEvents();
+                    //lista eventow jests zapelniona, ale tworzony jest tylko jeden period
+                    List<EventRequest> eventRequests = requestService.getEventRequests();
+                    //todo: wyglada na to jakby lista byla pusta, uzywam requestService, bo korzysta on juz z EventRequestFactory
                     //ale wylada na to jakby nigdzie te eventy nie byly zapisywane
-                    List<EventRequest> requests = requestService.getEventRequests();
-                    List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(requests);
+                    List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);
                     for (Period generatedPeriod : generatedPeriods) {
                         System.out.println(generatedPeriod);
                     }
                     System.out.println();
                     List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
                     System.out.println();
-                    System.out.println("Your flight requests:");
+                    System.out.println("Your flight eventRequests:");
                     for (FlightRequest flightRequest : flightRequests) {
                         System.out.println(flightRequest);
                     }
-                    System.out.println("Your event requests:");
-                    for (EventRequest request : requests) {
+                    System.out.println("Your event eventRequests:");
+                    for (EventRequest request : eventRequests) {
                         System.out.println(request);
                     }
-                    reportService.calculatePointsForRequest();
+                    System.out.println("raport/n");
+                    reportService.finalizedReport(flightRequests, eventRequests);
+                    //reportService.calculatePointsForRequest();
 
 
 
@@ -97,6 +99,7 @@ public class AppController {
 
 
     private void modifyRequests() {
+
         eventService.showEvents();
         System.out.println("Type 'add' to add even, 'delete' to remove event, 'exit' to go back.");
         String userInput = scanner.nextLine();
