@@ -6,17 +6,19 @@ import java.util.List;
 public abstract class Request {
     private int points;
 
-    abstract LocalDateTime getStartTime();
+    public abstract LocalDateTime getStartTime();
 
     abstract LocalDateTime getEndTime();
 
-    abstract int getPoints();
+    public int getPoints(){
+        return points;
+    }
 
     public void setPoints(int points) {
         this.points = points;
     }
 
-    abstract RequestType getType();
+    public abstract RequestType getType();
 
     public abstract int getNumberOfStars();
 

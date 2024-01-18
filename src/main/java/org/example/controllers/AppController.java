@@ -58,24 +58,10 @@ public class AppController {
                     for (EventRequest request : eventRequests) {
                         System.out.println(request);
                     }
-                    System.out.println("raport/n");
-                    reportService.finalizedReport(flightRequests, eventRequests);
-                    //reportService.calculatePointsForRequest();
 
+                    Report report = reportService.finalizedReport(flightRequests, eventRequests);
+                    displayFinalReport(report);
 
-
-
-                    // - wyswietlenie eventRequestow i pytanie uzytkownika czy sie zgadza
-                    // - jesli sie nie zgadza, to przerywamy proces i ma mozliwosc poporawienia swoich wolnych
-                    // - program generuje okresy i wypiuje je i sprawdza czy wszystko sie zgadza - jesl sie nie zgadza, to tak jak wczesniej
-                    // - iterowanie po okresach i pozwalanie uzytkownikowi wybrac od 1 do kilku lotow w ramach jednego okresu
-                    // - w trakcie iteracji:
-                    //      - period jest uzupelniany lotami
-                    //      - upozadkowanie wg ulubionych lub dlugosci lotu itp
-                    //      - loty sa prezentowane uzykownikowi
-                    //      - uzytkownik wybiera od 1 do kilku lotow i nadaje im priorytety (wybieranie za pomoca numeru pozycji)
-                    //      - kazdy wybor uzytkownika powoduje stworzenie FlightRequest dla wybranego przez niego lotu i priorytet
-                    // - skladany jest koncowy raport i przeliczane sa priorytety na punkty
                 }
                 case 2 -> modifyRequests();
                 case 3 ->
@@ -87,6 +73,13 @@ public class AppController {
 
         } while (choice != 4);
 
+    }
+
+    private void displayFinalReport(Report report) {
+        List<Request> requests = report.getRequests();
+        for (Request request : requests) {
+            System.out.println("Date:" + request.getStartTime() + " Type:" + request.getType() + " Points:" + request.getPoints());
+        }
     }
 
     public void displayMenu() {

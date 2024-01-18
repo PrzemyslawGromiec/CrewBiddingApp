@@ -23,13 +23,9 @@ public class EventRequest extends Request {
         return events.get(events.size()-1).getEnd();
     }
 
-    @Override
-    int getPoints() {
-        return 0;
-    }
 
     @Override
-    RequestType getType() {
+    public RequestType getType() {
         return RequestType.EVENT;
     }
 

@@ -13,7 +13,7 @@ public class FlightRequest extends Request{
     }
 
     @Override
-    LocalDateTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return flight.getReportTime();
     }
 
@@ -22,13 +22,9 @@ public class FlightRequest extends Request{
         return flight.getClearTime();
     }
 
-    @Override
-    int getPoints() {
-        return 0;
-    }
 
     @Override
-    RequestType getType() {
+    public RequestType getType() {
         return RequestType.FLIGHT;
     }
 
