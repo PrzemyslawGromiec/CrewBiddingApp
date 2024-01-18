@@ -5,6 +5,7 @@ import org.example.entities.Event;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EventBinRepository implements EventRepository{
 
@@ -52,6 +53,13 @@ public class EventBinRepository implements EventRepository{
 
     public int getNextId() {
         return nextId++;
+    }
+
+    @Override
+    public Optional<Event> removeById(int id) {
+        //todo znalezc w events po id, skasowac, zaktualizować plik i zwrocic odpowiedni optional
+
+        return Optional.empty();
     }
 
 }

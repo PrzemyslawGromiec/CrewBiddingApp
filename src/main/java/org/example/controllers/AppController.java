@@ -24,11 +24,11 @@ public class AppController {
         this.periodFactory = new PeriodFactory();
         this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);
-        this.reportService = new ReportService(requestService);
+        this.reportService = new ReportService();
     }
 
     public void run() {
-        int choice = 0;
+        int choice;
         System.out.println("Welcome to the crew bidding system!");
         do {
             displayMenu();
@@ -37,12 +37,7 @@ public class AppController {
             switch (choice) {
                 case 1 -> {
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
-                    //List<EventRequest> eventRequests = eventRequestFactory.createRequests(eventService.getEvents());
-                    //List<Event> events = eventService.getEvents();
-                    //lista eventow jests zapelniona, ale tworzony jest tylko jeden period
                     List<EventRequest> eventRequests = requestService.getEventRequests();
-                    //todo: wyglada na to jakby lista byla pusta, uzywam requestService, bo korzysta on juz z EventRequestFactory
-                    //ale wylada na to jakby nigdzie te eventy nie byly zapisywane
                     List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);
                     for (Period generatedPeriod : generatedPeriods) {
                         System.out.println(generatedPeriod);
@@ -92,7 +87,6 @@ public class AppController {
 
 
     private void modifyRequests() {
-
         eventService.showEvents();
         System.out.println("Type 'add' to add even, 'delete' to remove event, 'exit' to go back.");
         String userInput = scanner.nextLine();
@@ -125,7 +119,6 @@ public class AppController {
         while (true) {
             System.out.println("Enter your choice:");
             userInput = scanner.nextLine();
-
             if (isUserInputValid(userInput)) {
                 return Integer.parseInt(userInput);
             } else {

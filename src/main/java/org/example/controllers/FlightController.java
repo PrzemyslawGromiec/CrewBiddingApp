@@ -42,7 +42,6 @@ public class FlightController {
 
         Optional<Flight> selectedFlight = periodController.chooseFlight(requestService, availableFlights);
 
-        //selectedFlight.ifPresent(flight -> System.out.println("No flight selected"));
         if (selectedFlight.isEmpty()) {
             System.out.println("No flight selected for this period.");
             return;

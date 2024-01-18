@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.example.entities.Period;
+import org.example.repositories.EventBinRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 class RequestServiceTest {
-    private RequestService requestService = new RequestService(eventService);
+    private RequestService requestService = new RequestService(new EventService(new EventBinRepository()));
 
 
     @Test

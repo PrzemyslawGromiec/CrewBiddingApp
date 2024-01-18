@@ -12,19 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReportService {
-    private RequestService requestService;
-
-
-    public ReportService(RequestService requestService) {
-        this.requestService = requestService;
-    }
 
     public Report finalizedReport(List<FlightRequest> flightRequests, List<EventRequest> eventRequests) {
         List<Request> requests = requestSortedByStars(flightRequests, eventRequests);
         calculateStarsForPoints(requests);
         List<Request> requestSortedByDates = sortByDates(requests);
         return new Report(LocalDate.now(), requestSortedByDates);
-
     }
 
     private List<Request> requestSortedByStars(List<FlightRequest> flightRequests, List<EventRequest> eventRequests) {

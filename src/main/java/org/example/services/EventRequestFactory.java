@@ -10,6 +10,7 @@ import java.util.List;
 public class EventRequestFactory {
     private List<EventRequest> requests = new ArrayList<>();
 
+
     public List<EventRequest> createRequests(List<Event> events) {
         events.sort(Comparator.comparing(Event::getStart));
         List<List<Event>> groupedEvents = new ArrayList<>();
@@ -35,10 +36,6 @@ public class EventRequestFactory {
         for (List<Event> group : groupedEvents) {
             requests.add(new EventRequest(group));
         }
-        return requests;
-    }
-
-    public List<EventRequest> getRequests() {
         return requests;
     }
 

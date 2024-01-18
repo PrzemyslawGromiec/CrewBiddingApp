@@ -10,15 +10,14 @@ import java.util.stream.Collectors;
 
 public class EventService {
     private Scanner scanner = new Scanner(System.in);
-    private List<Event> events;
     private EventRepository eventRepository;
 
     public EventService(EventRepository eventRepository) {
-        this.events = eventRepository.getEvents();
         this.eventRepository = eventRepository;
     }
 
     public void addAllEvents() {
+        List<Event> newEvents = new ArrayList<>();
         do {
             try {
                 Event newEvent = createEvent();
@@ -29,8 +28,8 @@ public class EventService {
                     if (isSameDayDifferentTime(newEvent)) {
                         System.out.println("Warning: this event is at the same day as existing event.");
                     }
-                    events.add(newEvent);
                     System.out.println("Event added successfully.");
+                    newEvents.add(newEvent);
                 }
 
             } catch (Exception e) {
@@ -38,7 +37,7 @@ public class EventService {
             }
         } while (doYouWantContinue());
         showEvents();
-        eventRepository.saveEvents(events);
+        eventRepository.saveEvents(newEvents);
     }
 
     private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime time) {
@@ -107,7 +106,7 @@ public class EventService {
     }
 
     private boolean isOverlapping(Event event) {
-        for (Event existingEvent : events) {
+        for (Event existingEvent : eventRepository.getEvents()) {
             if (event.overlapsWith(existingEvent)) {
                 return true;
             }
@@ -116,7 +115,7 @@ public class EventService {
     }
 
     private boolean isSameDayDifferentTime(Event newEvent) {
-        for (Event exitingEvent : events) {
+        for (Event exitingEvent : eventRepository.getEvents()) {
             if (exitingEvent.isAtThatDayDifferentTime(newEvent)) {
                 return true;
             }
@@ -138,6 +137,7 @@ public class EventService {
     }
 
     public void showEvents() {
+        List<Event> events = eventRepository.getEvents();
         if (!events.isEmpty()) {
             System.out.println("List of all your events:");
             for (Event event : events) {
@@ -148,86 +148,13 @@ public class EventService {
         }
     }
 
-    private void deleteByDescription() {
-        System.out.println("In order to delete event, type its description below:");
-        String description = scanner.nextLine();
-        if (events.removeIf(event -> event.getDescription().equalsIgnoreCase(description))) {
-            System.out.println("Event deleted successfully.");
-        } else {
-            System.out.println("Event with that description doesn't exist.");
-        }
-    }
-
     public void deleteById() {
         System.out.println("Enter event ID number to delete from database:");
         int userInput = getValidOption();
-        if (events.removeIf(event -> event.getId() == userInput)) {
-            eventRepository.saveEvents(events);
+        if (eventRepository.removeById(userInput).isPresent()) {
             System.out.println("Event deleted successfully.");
         } else {
             System.out.println("Event with that ID number doesn't exist.");
-        }
-    }
-
-    public List<Event> getEvents() {
-        return new ArrayList<>(events);
-    }
-
-    public List<Event> getEventsByPriority(int priority) {
-        return events.stream()
-                .filter(event -> event.getPriority() == priority)
-                .collect(Collectors.toList());
-    }
-
-    public Duration getTotalPeriod() {
-        if (events.isEmpty()) {
-            return Duration.ZERO;
-        }
-
-        LocalDateTime earliestStart = events.get(0).getStart();
-        LocalDateTime latestEnd = events.get(0).getEnd();
-
-        for (Event event : events) {
-            if (event.getStart().isBefore(earliestStart)) {
-                earliestStart = event.getStart();
-            }
-            if (event.getEnd().isAfter(latestEnd)) {
-                latestEnd = event.getEnd();
-            }
-        }
-        return Duration.between(earliestStart, latestEnd);
-    }
-
-    public Set<LocalDate> getCoveredDays() {
-        if (events.isEmpty()) {
-            return new HashSet<>();
-        }
-
-        LocalDate earliestStart = events.get(0).getStart().toLocalDate();
-        LocalDate latestEnd = events.get(0).getEnd().toLocalDate();
-        for (Event event : events) {
-            LocalDate startDate = event.getStart().toLocalDate();
-            LocalDate endDate = event.getEnd().toLocalDate();
-            if (startDate.isBefore(earliestStart)) {
-                earliestStart = startDate;
-            }
-            if (endDate.isAfter(latestEnd)) {
-                latestEnd = endDate;
-            }
-        }
-        Set<LocalDate> coveredDates = new HashSet<>();
-        LocalDate currentDate = earliestStart;
-        while (!currentDate.isAfter(latestEnd)) {
-            coveredDates.add(currentDate);
-            currentDate = currentDate.plusDays(1);
-        }
-        return coveredDates;
-    }
-
-    public void displayCoveredDays() {
-        Set<LocalDate> coveredDates = getCoveredDays();
-        for (LocalDate coveredDate : coveredDates) {
-            System.out.println(coveredDate);
         }
     }
 
@@ -256,4 +183,7 @@ public class EventService {
         }
     }
 
+    public List<Event> getEvents() {
+        return eventRepository.getEvents() ;
+    }
 }

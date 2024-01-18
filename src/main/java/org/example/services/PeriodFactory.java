@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.EventRequest;
 import org.example.entities.Period;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
@@ -20,28 +21,25 @@ public class PeriodFactory {
                     lastDayOfTheMonth.withDayOfMonth(nextMonth.maxLength())));
         }
 
-        EventRequest previousEventRequest = new EventRequest(new ArrayList<>());
         EventRequest firstRequest = requests.get(0);
 
-        if (!requests.isEmpty() ) {
-            if (firstRequest.getStartTime().getDayOfMonth() != 1) {
-                LocalDateTime periodStart = firstRequest.getStartTime().withDayOfMonth(1).toLocalDate().atStartOfDay();
-                LocalDateTime periodEnd = firstRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
-                createdPeriods.add(new Period(periodStart, periodEnd));
-            }
-            previousEventRequest = firstRequest;
+        if (firstRequest.getStartTime().getDayOfMonth() != 1) {
+            LocalDateTime periodStart = firstRequest.getStartTime().withDayOfMonth(1).toLocalDate().atStartOfDay();
+            LocalDateTime periodEnd = firstRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
+            createdPeriods.add(new Period(periodStart, periodEnd));
         }
+        EventRequest previousEventRequest = firstRequest;
 
         for (int i = 1; i < requests.size(); i++) {
             EventRequest currentEventRequest = requests.get(i);
-                LocalDateTime periodStart = previousEventRequest.getEndTime().toLocalDate().atStartOfDay().plusDays(1);
-                LocalDateTime periodEnd = currentEventRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
-                if (periodStart.isBefore(periodEnd)) {
-                    createdPeriods.add(new Period(periodStart, periodEnd));
-                }
-                previousEventRequest = currentEventRequest;
+            LocalDateTime periodStart = previousEventRequest.getEndTime().toLocalDate().atStartOfDay().plusDays(1);
+            LocalDateTime periodEnd = currentEventRequest.getStartTime().toLocalDate().atTime(LocalTime.MAX).minusDays(1);
+            if (periodStart.isBefore(periodEnd)) {
+                createdPeriods.add(new Period(periodStart, periodEnd));
+            }
+            previousEventRequest = currentEventRequest;
         }
         return createdPeriods;
-        }
     }
+}
 

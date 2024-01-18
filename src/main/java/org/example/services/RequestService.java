@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class RequestService {
     private FlightRequestFactory flightFactory = new FlightRequestFactory();
     private EventRequestFactory eventFactory = new EventRequestFactory();
-    //todo: czy ponowne dodanie eventService ma sens ?
     private EventService eventService;
 
     public RequestService(EventService eventService) {
@@ -22,15 +21,9 @@ public class RequestService {
     public List<FlightRequest> getFlightRequests() {
         return flightFactory.getRequests();
     }
-
-    //todo:gdy ustawie return eventFactory.createRequests(events), to dziala, ale tworzy podwojna liste
     public List<EventRequest> getEventRequests() {
         return eventFactory.createRequests(eventService.getEvents());
     }
-    /*public List<EventRequest> getEventRequests() {
-        return eventFactory.getRequests();
-    }*/
-
     public void buildRequest(Flight chosenFlight, int priority) {
         flightFactory.buildRequest(chosenFlight, priority);
     }
@@ -47,12 +40,10 @@ public class RequestService {
                     isValid = false;
                     break;
                 }
-
             }
             if (isValid) {
                 availableFlights.add(flight);
             }
-
         }
 
 
@@ -68,7 +59,4 @@ public class RequestService {
                 .sorted(Comparator.comparing(Flight::getReportTime))
                 .collect(Collectors.toList());
     }
-
-
-
 }

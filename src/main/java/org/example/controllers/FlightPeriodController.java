@@ -132,8 +132,4 @@ public class FlightPeriodController {
             System.out.println("NR: " + (i + 1) + " " + generatedFlight);
         }
     }
-
-    public List<Flight> getGeneratedFlights() {
-        return generatedFlights;
-    }
 }
