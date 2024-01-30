@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.entities.*;
+import org.example.repositories.DummyFlightsProvider;
 import org.example.repositories.EventBinRepository;
 import org.example.services.*;
 
@@ -18,9 +19,10 @@ public class AppController {
     private RequestService requestService;
 
 
+
     public AppController() {
         this.eventService = new EventService(new EventBinRepository());
-        this.flightService = new FlightService();
+        this.flightService = new FlightService(new DummyFlightsProvider());
         this.periodFactory = new PeriodFactory();
         this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);

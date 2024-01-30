@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EventBinRepository implements EventRepository{
+public class EventBinRepository implements EventRepository {
 
     private static final String FILE_NAME = "events.bin";
     private int nextId = 0;
@@ -55,11 +55,27 @@ public class EventBinRepository implements EventRepository{
         return nextId++;
     }
 
+    private Optional<Event> findById(int id) {
+        for (Event event : events) {
+            if (event.getId() == id) {
+                return Optional.of(event);
+            }
+        }
+        return Optional.empty();
+    }
+
     @Override
     public Optional<Event> removeById(int id) {
         //todo znalezc w events po id, skasowac, zaktualizować plik i zwrocic odpowiedni optional
-
-        return Optional.empty();
+        Optional<Event> optionalEvent = findById(id);
+        if (optionalEvent.isPresent()) {
+            Event eventToBeRemoved = optionalEvent.get();
+            events.remove(eventToBeRemoved);
+            saveEvents(events);
+            return Optional.of(eventToBeRemoved);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }

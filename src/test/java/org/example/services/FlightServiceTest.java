@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.example.entities.Period;
+import org.example.repositories.DummyFlightsProvider;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -18,11 +19,12 @@ public class FlightServiceTest {
 
     @Test
     public void flightGenerator(){
+        DummyFlightsProvider flightsProvider = new DummyFlightsProvider();
 
-        FlightService flightService = new FlightService();
-        flightService.setToday(LocalDate.of(2023,11,28));
+        FlightService flightService = new FlightService(flightsProvider);
+        flightsProvider.setToday(LocalDate.of(2023,11,28));
 
-        List<Flight> wawFlight = flightService.generateCustomRecurringFlights("BA210", "WAW",
+        List<Flight> wawFlight = flightsProvider.generateCustomRecurringFlights("BA210", "WAW",
                 AircraftType.A320, LocalTime.of(12,30), Duration.ofHours(10));
 
         int nextMonth = LocalDate.now().plusMonths(1).getMonth().maxLength();
@@ -39,7 +41,7 @@ public class FlightServiceTest {
     public void fillingPeriodWithFlights() {
         Period period = new Period(LocalDateTime.of(2024,1,12,5,0),
                 LocalDateTime.of(2024,1,13,23,0));
-        FlightService flightService = new FlightService();
+        FlightService flightService = new FlightService(new DummyFlightsProvider());
 
         List<Flight> flights = flightService.generateFlightsForPeriod(period);
 
