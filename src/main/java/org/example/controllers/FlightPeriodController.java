@@ -126,7 +126,7 @@ public class FlightPeriodController {
 
 
     private void printListOfFlights(List<Flight> flights) {
-        System.out.println("Flights available in this period: ");
+        System.out.println("Flights.txt available in this period: ");
         for (int i = 0; i < flights.size(); i++) {
             Flight generatedFlight = flights.get(i);
             System.out.println("NR: " + (i + 1) + " " + generatedFlight);
