@@ -1,20 +1,19 @@
 package org.example.services;
 
-import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.example.entities.Period;
+import org.example.repositories.generator.FlightGeneratorFacade;
 
-import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlightService {
     private List<Flight> flights = new ArrayList<>();
-    private FlightsProvider flightsProvider;
+    private FlightGeneratorFacade flightGenerator;
 
-    public FlightService(FlightsProvider flightsProvider) {
-        this.flightsProvider = flightsProvider;
-        flights.addAll(flightsProvider.provideFlights());
+    public FlightService(FlightGeneratorFacade flightGenerator) {
+        this.flightGenerator = flightGenerator;
+        flights.addAll(flightGenerator.generateFlights());
     }
 
 

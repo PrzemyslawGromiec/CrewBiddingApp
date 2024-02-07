@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.example.entities.Period;
-import org.example.repositories.DummyFlightsProvider;
+import org.example.repositories.generator.DummyFlightsProvider;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

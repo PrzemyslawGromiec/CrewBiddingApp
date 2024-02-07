@@ -1,10 +1,11 @@
 package org.example.controllers;
 
 import org.example.entities.*;
-import org.example.repositories.DummyFlightsProvider;
-import org.example.repositories.EventBinRepository;
+import org.example.repositories.*;
+import org.example.repositories.generator.FlightGeneratorFacade;
+import org.example.repositories.generator.Source;
 import org.example.services.*;
-
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,10 +20,9 @@ public class AppController {
     private RequestService requestService;
 
 
-
-    public AppController() {
+    public AppController() throws FileNotFoundException {
         this.eventService = new EventService(new EventBinRepository());
-        this.flightService = new FlightService(new DummyFlightsProvider());
+        this.flightService = new FlightService(FlightGeneratorFacade.Factory.createFlightFacade(Source.FILE));
         this.periodFactory = new PeriodFactory();
         this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);

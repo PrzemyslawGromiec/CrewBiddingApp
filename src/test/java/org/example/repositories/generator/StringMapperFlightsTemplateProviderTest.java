@@ -1,27 +1,26 @@
-package org.example.repositories;
+package org.example.repositories.generator;
 
 import org.example.entities.AircraftType;
 import org.example.entities.Flight;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class StringMapperFlightsProviderTest {
+class StringMapperFlightsTemplateProviderTest {
 
     @Test
     void parseLineToFlight() {
-        StringMapperFlightsProvider mapperFlightsProvider = new StringMapperFlightsProvider(null);
-        Flight flight = mapperFlightsProvider.parseLineToFlight("✓ 04.30 REPORT BA0337 MRS");
+        StringMapperFlightsTemplateProvider mapperFlightsProvider = new StringMapperFlightsTemplateProvider(null);
+        FlightTemplate flight = mapperFlightsProvider.parseLineToFlight("✓ 04.30 REPORT BA0337 MRS").get();
         Assertions.assertEquals("BA0337", flight.getFlightNumber());
         Assertions.assertEquals("MRS", flight.getAirportCode());
         Assertions.assertEquals(4,flight.getReportTime().getHour());
         Assertions.assertEquals(30,flight.getReportTime().getMinute());
-        assertEquals(flight.getClearTime().toLocalDate(), flight.getReportTime().toLocalDate());
+       // assertEquals(flight.getClearTime().toLocalDate(), flight.getReportTime());
         Assertions.assertEquals(AircraftType.A320, flight.getAircraftType());
-        Assertions.assertFalse(flight.isFavourite());
+        //dni tygodnia
+       //Assertions.assertFalse(flight.isFavourite());
 
     }
 }

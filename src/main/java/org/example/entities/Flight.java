@@ -1,9 +1,11 @@
 package org.example.entities;
 
+import org.example.services.FlightService;
+
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.PriorityQueue;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAmount;
 
 public class Flight {
     private String flightNumber;
@@ -21,6 +23,7 @@ public class Flight {
         this.clearTime = clearTime;
         this.aircraftType = aircraftType;
     }
+
 
     public String getFlightNumber() {
         return flightNumber;

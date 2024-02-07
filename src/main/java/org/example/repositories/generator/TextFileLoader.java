@@ -1,4 +1,4 @@
-package org.example.repositories;
+package org.example.repositories.generator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class TextFileLoader {
+class TextFileLoader {
     private String filePath;
 
     public TextFileLoader(String filePath) {
