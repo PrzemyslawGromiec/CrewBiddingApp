@@ -7,10 +7,7 @@ import org.example.entities.Period;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
@@ -54,6 +51,19 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
             clearMinutes = Integer.parseInt(clearTime.substring(3,5));
 
         }
+        //✓ 14.55 REPORT BA0189 EWR (B787) THREE DAY TRIP CLEARS @10.10AM
+        String[] parts = line.split(" ");
+        String numOfDays = "";
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (part.equalsIgnoreCase("DAY")) {
+                numOfDays = parts[i-1];
+                System.out.println(line);
+                durationDays = getNumOfDays(numOfDays);
+                break;
+            }
+        }
+
         //todo: dopisac godziny clear po 18 i przestawic na + 6
         LocalTime clear = LocalTime.of(clearHour,clearMinutes);
         if (durationDays == 0) {
@@ -62,11 +72,20 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
 
         return Optional.of(new FlightTemplate(flightNr, code, LocalTime.of(hourInt, minutesInt),clear, durationDays,daysOfWeek,aircraftType));
     }
-    private static List<DayOfWeek> extractDaysOfWeek(String line) {
+
+    private static int getNumOfDays (String days) {
+        List<String> listOfNumbers = List.of("TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE");
+        int i = listOfNumbers.indexOf(days);
+        if (i == -1) {
+            throw new UnsupportedOperationException("Not found.");
+        }
+        return i + 2;
+    }
+    private static List<DayOfWeek> extractDaysOfWeek(String lineFragment) {
         List<DayOfWeek> daysOfWeek = new ArrayList<>();
         String[] dayStrings = {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"};
         for (String dayString : dayStrings) {
-            if (line.contains(dayString)) {
+            if (lineFragment.contains(dayString)) {
                 daysOfWeek.add(DayOfWeek.valueOf(dayString.toUpperCase()));
             }
         }

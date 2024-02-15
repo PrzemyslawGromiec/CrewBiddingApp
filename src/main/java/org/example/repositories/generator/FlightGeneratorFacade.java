@@ -28,7 +28,6 @@ public class FlightGeneratorFacade {
         }
         return flights;
 
-        //throw new UnsupportedOperationException();//todo
     }
 
     private List<Flight> generateCustomRecurringFlights(FlightTemplate flightTemplate) {

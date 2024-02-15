@@ -15,6 +15,8 @@ class FlightTemplate {
     private int durationDays = 0;
     private List<DayOfWeek> days = new ArrayList<>();  //empty list = all days of the week
     private AircraftType aircraftType = AircraftType.A320;
+    private List<DayOfWeek> differentLengthTrip = new ArrayList<>();
+    private int dayChangeDifference = 0;
 
 
     public FlightTemplate(String flightNumber, String airportCode, LocalTime reportTime, LocalTime clearTime, int durationDays, List<DayOfWeek> days, AircraftType aircraftType) {
