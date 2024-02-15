@@ -32,6 +32,7 @@ class FlightTemplate {
         this.airportCode = airportCode;
         this.reportTime = reportTime;
     }
+
     public List<DayOfWeek> getDays() {
 
         if (days.isEmpty()) {
@@ -62,5 +63,22 @@ class FlightTemplate {
 
     public AircraftType getAircraftType() {
         return aircraftType;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightTemplate{" +
+                "flightNumber='" + flightNumber + '\'' +
+                ", airportCode='" + airportCode + '\'' +
+                ", reportTime=" + reportTime +
+                ", clearTime=" + clearTime +
+                ", durationDays=" + durationDays +
+                ", days=" + days +
+                ", aircraftType=" + aircraftType +
+                '}';
+    }
+
+    public boolean flightsOn(DayOfWeek dayOfWeek) {
+        return getDays().contains(dayOfWeek);
     }
 }

@@ -11,6 +11,8 @@ import java.util.Set;
 public class FlightGeneratorFacade {
 
     private FlightsTemplateProvider flightsTemplateProvider;
+
+    //todo: czy to nie powinien byc kolejny miesiac?
     private LocalDate today = LocalDate.now();
 
     private FlightGeneratorFacade(FlightsTemplateProvider flightsTemplateProvider) {
@@ -19,37 +21,30 @@ public class FlightGeneratorFacade {
     }
 
     public List<Flight> generateFlights() {
-        List<FlightTemplate> flights = flightsTemplateProvider.provideFlights();
+        List<FlightTemplate> flightTemplates = flightsTemplateProvider.provideFlights();
+        List<Flight> flights = new ArrayList<>();
+        for (FlightTemplate flightTemplate : flightTemplates) {
+            flights.addAll(generateCustomRecurringFlights(flightTemplate));
+        }
+        return flights;
 
-        throw new UnsupportedOperationException();//todo
+        //throw new UnsupportedOperationException();//todo
     }
 
     private List<Flight> generateCustomRecurringFlights(FlightTemplate flightTemplate) {
         List<Flight> flights = new ArrayList<>();
         for (int day = 1; day <= today.getMonth().maxLength(); day++) {
+            if (!flightTemplate.flightsOn(today.withDayOfMonth(day).getDayOfWeek())) {
+                continue;
+            }
 
             LocalDateTime report = LocalDateTime.of(today.withDayOfMonth(day), flightTemplate.getReportTime());
             LocalDateTime clear = LocalDateTime.of(today.withDayOfMonth(day).plusDays(flightTemplate.getDurationDays()), flightTemplate.getClearTime());
 
-            flights.add(new Flight(flightTemplate.getFlightNumber(),flightTemplate.getAirportCode(),report,clear,flightTemplate.getAircraftType()));
+            flights.add(new Flight(flightTemplate.getFlightNumber(), flightTemplate.getAirportCode(), report, clear, flightTemplate.getAircraftType()));
 
         }
         return flights;
-    }
-
-    private List<Flight> generateCustomRecurringFlightsForSelectedDays(Flight flight, Set<DayOfWeek> operationDays) {
-        List<Flight> flightsForSelectedDays = new ArrayList<>();
-       /* LocalDate date = today.plusMonths(1).withDayOfMonth(1);
-
-        while (date.getMonth() == today.plusMonths(1).getMonth()) {
-            if (operationDays.contains(date.getDayOfWeek())) {
-                LocalDateTime takeoffDateTime = date.atTime(flight.getReportTime());
-                LocalDateTime landingDateTime = takeoffDateTime.plus(flight.getClearTime());
-                flightsForSelectedDays.add(new Flight(flight.getFlightNumber(), flight.getAirportCode(), takeoffDateTime, landingDateTime, flight.getAircraftType()));
-            }
-            date = date.plusDays(1);
-        }*/
-        return flightsForSelectedDays;
     }
 
     public static class Factory {
