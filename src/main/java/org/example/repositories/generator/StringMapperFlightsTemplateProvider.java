@@ -40,7 +40,6 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
 
         List<DayOfWeek> daysOfWeek = extractDaysOfWeek(line);
         AircraftType aircraftType = extractAircraftType(line);
-        //int durationDays = calculateDuration(line);
         int clearHour = 0;
         int clearMinutes = 0;
         int durationDays = 0;
@@ -51,7 +50,7 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
             clearMinutes = Integer.parseInt(clearTime.substring(3,5));
 
         }
-        //✓ 14.55 REPORT BA0189 EWR (B787) THREE DAY TRIP CLEARS @10.10AM
+
         String[] parts = line.split(" ");
         String numOfDays = "";
         for (int i = 0; i < parts.length; i++) {
@@ -104,29 +103,6 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
         }
         return AircraftType.A320;
     }
-
-    private static int calculateDuration(String line) {
-        // Check if "DAY TRIP" is present in the line
-        if (!line.contains("DAY TRIP")) {
-            // If "DAY TRIP" is not present, return 0
-            return 0;
-        }
-
-        // Extract the portion of the line after "DAY TRIP" or "CLEARS"
-        String durationString = line.contains("CLEARS") ?
-                line.substring(line.indexOf("DAY TRIP") + 8, line.indexOf("CLEARS")) :
-                line.substring(line.indexOf("DAY TRIP") + 8);
-       // System.out.println("Duration string: " + durationString); // Debug print
-
-        // Split the duration string by whitespace and extract the first token
-        String[] tokens = durationString.trim().split("\\s+");
-        if (tokens.length > 0 && tokens[0].matches("\\d+")) { // Check if the first token is a number
-            return Integer.parseInt(tokens[0]); // Parse the number of days
-        } else {
-            return 0; // Return 0 if the duration string is not in the expected format
-        }
-    }
-
 
     //✓ 11.55 REPORT BA0225 MSY (787) FIVE DAY TRIP ON SATURDAY, FOUR DAY TRIP ON TUESDAY, THREE DAY TRIP THURSDAY, FRIDAY CLEARS @11.10AM
 }
