@@ -11,32 +11,27 @@ public class EventBinRepository implements EventRepository {
 
     private static final String FILE_NAME = "events.bin";
     private int nextId = 0;
-    private List<Event> events;
 
-    public EventBinRepository() {
-        loadEvents();
-    }
 
-    private void loadEvents() {
+    private List<Event> loadEvents() {
         try {
             File file = new File(FILE_NAME);
             if (file.exists()) {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 nextId = objectInputStream.readInt();
-                this.events = (List<Event>) objectInputStream.readObject();
+                List<Event>  events = (List<Event>) objectInputStream.readObject();
                 objectInputStream.close();
-            } else {
-                this.events = new ArrayList<>();
+                return events;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            this.events = new ArrayList<>();
         }
+        return new ArrayList<>();
     }
 
     @Override
     public List<Event> getEvents() {
-        return new ArrayList<>(this.events);
+        return new ArrayList<>(loadEvents());
     }
 
     @Override
@@ -56,7 +51,7 @@ public class EventBinRepository implements EventRepository {
     }
 
     private Optional<Event> findById(int id) {
-        for (Event event : events) {
+        for (Event event : getEvents()) {
             if (event.getId() == id) {
                 return Optional.of(event);
             }
@@ -69,6 +64,7 @@ public class EventBinRepository implements EventRepository {
         Optional<Event> optionalEvent = findById(id);
         if (optionalEvent.isPresent()) {
             Event eventToBeRemoved = optionalEvent.get();
+            List<Event> events = getEvents();
             events.remove(eventToBeRemoved);
             saveEvents(events);
             return Optional.of(eventToBeRemoved);

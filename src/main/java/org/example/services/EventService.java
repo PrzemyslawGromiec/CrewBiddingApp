@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class EventService {
     private Scanner scanner = new Scanner(System.in);
     private EventRepository eventRepository;
-    private Time time;
+    private Time time = Time.getTime();
 
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
@@ -42,13 +42,14 @@ public class EventService {
         eventRepository.saveEvents(newEvents);
     }
 
-    private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime time) {
-        LocalDate twoMonthsAhead = LocalDate.now().plusMonths(1).withDayOfMonth(dayOfMonth);
-        return LocalDateTime.of(twoMonthsAhead, time);
+    private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime hour) {
+        LocalDate twoMonthsAhead = time.nextMonthTime().withDayOfMonth(dayOfMonth);
+        return LocalDateTime.of(twoMonthsAhead, hour);
     }
 
     private Event createEvent() {
         //TODO: wpisujac dzien istnieje opcja zabookowania calego dnia lub od razu dodanie godziny
+
         Month eventMonth = time.nextMonthTime().getMonth();
         System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");
@@ -60,6 +61,10 @@ public class EventService {
 
         System.out.println("Enter the end day of your event (as a number):");
         int endDay = getValidOption();
+        System.out.println("Is your event reoccurring ?");
+        System.out.println("type \"yes\" or \"no\"");
+        String answer = scanner.nextLine();
+
 
         Map<String, LocalTime> times = getEventTime();
         LocalTime startTime = times.get("startTime");
@@ -70,7 +75,11 @@ public class EventService {
         int priority = getEventPriority();
         int eventId = eventRepository.getNextId();
 
-        return new Event(eventId, startDateTime, endDateTime, priority, description);
+        Event createdEvent = new Event(eventId, startDateTime, endDateTime, priority, description);
+        if (answer.equalsIgnoreCase("yes")) {
+            createdEvent.setReoccurring(true);
+        }
+        return createdEvent;
     }
 
 

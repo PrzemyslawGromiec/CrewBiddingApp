@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.general.Time;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,10 +14,11 @@ public class Event implements Serializable {
     private int priority;
     private String description;
     private int id;
+    private boolean reoccurring = false;
 
 
     public Event(int id, LocalDateTime start, LocalDateTime end, int priority, String description) {
-        if(end.isBefore(start)) {
+        if (end.isBefore(start)) {
             throw new IllegalArgumentException("End time must be after start date.");
         }
         this.id = id;
@@ -26,59 +29,56 @@ public class Event implements Serializable {
     }
 
     public boolean overlapsWith(Event other) {
-        return !this.end.isBefore(other.start) && !this.start.isAfter(other.end);
+        return !getEnd().isBefore(other.getStart()) && !getStart().isAfter(other.getEnd());
     }
 
     public boolean isAtThatDayDifferentTime(Event other) {
-        LocalDate thisDate = this.start.toLocalDate();
-        LocalDate otherDate = other.start.toLocalDate();
+        LocalDate thisDate = getStart().toLocalDate();
+        LocalDate otherDate = other.getStart().toLocalDate();
 
         return thisDate.equals(otherDate) &&
-                (this.end.isBefore(other.start) || this.start.isAfter(other.end));
+                (getEnd().isBefore(other.getStart()) || getStart().isAfter(other.getEnd()));
     }
 
     public LocalDateTime getStart() {
+        if (reoccurring) {
+            start = withAppTime(start,0);
+        }
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
     public LocalDateTime getEnd() {
+        if (reoccurring) {
+            if ((start.getMonth() != end.getMonth())) {
+                end = withAppTime(end,1);
+            } else {
+                end = withAppTime(end,0);
+            }
+        }
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    private LocalDateTime withAppTime(LocalDateTime time, int plusMonth) {
+        return time.withMonth(Time.getTime().nextMonthTime().plusMonths(plusMonth).getMonthValue());
     }
-
     public int getPriority() {
         return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setReoccurring(boolean reoccurring) {
+        this.reoccurring = reoccurring;
     }
 
     @Override
     public String toString() {
         return "Event{" +
                 "id: " + id +
-                " ,start = " + start +
-                ", end = " + end +
+                " ,start = " + getStart() +
+                ", end = " + getEnd() +
                 ", priority=" + priority +
                 ", description='" + description + '\'' +
                 '}';
