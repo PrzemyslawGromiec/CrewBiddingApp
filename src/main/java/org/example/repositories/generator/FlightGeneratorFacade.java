@@ -1,6 +1,7 @@
 package org.example.repositories.generator;
 
 import org.example.entities.Flight;
+import org.example.general.Time;
 
 import java.io.FileNotFoundException;
 import java.time.*;
@@ -12,11 +13,11 @@ public class FlightGeneratorFacade {
 
     private FlightsTemplateProvider flightsTemplateProvider;
 
-    //todo: czy to nie powinien byc kolejny miesiac?
-    private LocalDate today = LocalDate.now();
+    private Time time;
 
-    private FlightGeneratorFacade(FlightsTemplateProvider flightsTemplateProvider) {
+    private FlightGeneratorFacade(FlightsTemplateProvider flightsTemplateProvider, Time time) {
         this.flightsTemplateProvider = flightsTemplateProvider;
+        this.time = time;
 
     }
 
@@ -32,13 +33,14 @@ public class FlightGeneratorFacade {
 
     private List<Flight> generateCustomRecurringFlights(FlightTemplate flightTemplate) {
         List<Flight> flights = new ArrayList<>();
-        for (int day = 1; day <= today.getMonth().maxLength(); day++) {
-            if (!flightTemplate.flightsOn(today.withDayOfMonth(day).getDayOfWeek())) {
+        LocalDate nextMonth = time.nextMonthTime();
+        for (int day = 1; day <= nextMonth.getMonth().maxLength(); day++) {
+            if (!flightTemplate.flightsOn(nextMonth.withDayOfMonth(day).getDayOfWeek())) {
                 continue;
             }
 
-            LocalDateTime report = LocalDateTime.of(today.withDayOfMonth(day), flightTemplate.getReportTime());
-            LocalDateTime clear = LocalDateTime.of(today.withDayOfMonth(day).plusDays(flightTemplate.getDurationDays()), flightTemplate.getClearTime());
+            LocalDateTime report = LocalDateTime.of(nextMonth.withDayOfMonth(day), flightTemplate.getReportTime());
+            LocalDateTime clear = LocalDateTime.of(nextMonth.withDayOfMonth(day).plusDays(flightTemplate.getDurationDays()), flightTemplate.getClearTime());
 
             flights.add(new Flight(flightTemplate.getFlightNumber(), flightTemplate.getAirportCode(), report, clear, flightTemplate.getAircraftType()));
 
@@ -50,9 +52,9 @@ public class FlightGeneratorFacade {
         public static FlightGeneratorFacade createFlightFacade(Source source) throws FileNotFoundException {
             if (source == Source.FILE) {
                 TextFileLoader textFileLoader = new TextFileLoader("Flights.txt");
-                return new FlightGeneratorFacade(new StringMapperFlightsTemplateProvider(textFileLoader.readFile()));
+                return new FlightGeneratorFacade(new StringMapperFlightsTemplateProvider(textFileLoader.readFile()),Time.getTime());
             } else if (source == Source.DUMMY) {
-                return new FlightGeneratorFacade(new DummyFlightsTemplateProvider());
+                return new FlightGeneratorFacade(new DummyFlightsTemplateProvider(),Time.getTime());
             }
             throw new IllegalStateException("Source not implemented.");
         }

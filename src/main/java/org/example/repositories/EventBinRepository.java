@@ -66,7 +66,6 @@ public class EventBinRepository implements EventRepository {
 
     @Override
     public Optional<Event> removeById(int id) {
-        //todo znalezc w events po id, skasowac, zaktualizować plik i zwrocic odpowiedni optional
         Optional<Event> optionalEvent = findById(id);
         if (optionalEvent.isPresent()) {
             Event eventToBeRemoved = optionalEvent.get();

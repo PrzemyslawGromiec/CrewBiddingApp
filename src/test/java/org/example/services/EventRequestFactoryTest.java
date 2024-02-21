@@ -19,8 +19,6 @@ class EventRequestFactoryTest {
     void combineEventsTest() {
         EventRequestFactory eventRequestFactory = new EventRequestFactory();
 
-        //TODO: metoda przetestuje scenariusz czy np 20 eventow dzien po dniu i je sklei do jednego
-
         Event event1 = new Event(1,LocalDateTime.of(2023, 12, 12, 10, 15),
                 LocalDateTime.of(2023, 12, 13, 10, 0), 3, "uni");
 

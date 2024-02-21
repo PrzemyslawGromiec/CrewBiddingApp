@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.entities.Event;
+import org.example.general.Time;
 import org.example.repositories.EventRepository;
 
 import java.time.*;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class EventService {
     private Scanner scanner = new Scanner(System.in);
     private EventRepository eventRepository;
+    private Time time;
 
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
@@ -47,7 +49,7 @@ public class EventService {
 
     private Event createEvent() {
         //TODO: wpisujac dzien istnieje opcja zabookowania calego dnia lub od razu dodanie godziny
-        Month eventMonth = LocalDate.now().plusMonths(1).getMonth();
+        Month eventMonth = time.nextMonthTime().getMonth();
         System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");
         String description = scanner.nextLine();
@@ -184,6 +186,6 @@ public class EventService {
     }
 
     public List<Event> getEvents() {
-        return eventRepository.getEvents() ;
+        return eventRepository.getEvents();
     }
 }

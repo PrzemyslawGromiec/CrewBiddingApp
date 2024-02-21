@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.Event;
 import org.example.entities.EventRequest;
+import org.example.general.Time;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,13 +10,20 @@ import java.util.List;
 
 public class EventRequestFactory {
     private List<EventRequest> requests = new ArrayList<>();
+    private Time time;
 
+    public EventRequestFactory(Time time) {
+        this.time = time;
+    }
 
     public List<EventRequest> createRequests(List<Event> events) {
-        events.sort(Comparator.comparing(Event::getStart));
+        List<Event> sortedAndFilteredEvents = events.stream().filter(event -> event.getStart().getMonth() == time.nextMonthTime().getMonth()
+                        || event.getEnd().getMonth() == time.nextMonthTime().getMonth())
+                .sorted(Comparator.comparing(Event::getStart)).toList();
+
         List<List<Event>> groupedEvents = new ArrayList<>();
 
-        for (Event event : events) {
+        for (Event event : sortedAndFilteredEvents) {
             if (groupedEvents.isEmpty()) {
                 groupedEvents.add(new ArrayList<>());
                 groupedEvents.get(0).add(event);

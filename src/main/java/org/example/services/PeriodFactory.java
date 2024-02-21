@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.EventRequest;
 import org.example.entities.Period;
+import org.example.general.Time;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,11 +12,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class PeriodFactory {
+
+    private Time time = Time.getTime();
     public List<Period> createPeriodsBetweenRequests(List<EventRequest> requests) {
         List<Period> createdPeriods = new ArrayList<>();
         if (requests.isEmpty()) {
-            LocalDateTime firstDayOfNextMonth = LocalDateTime.now().plusMonths(1).toLocalDate().atTime(LocalTime.MIN);
-            LocalDateTime lastDayOfTheMonth = LocalDateTime.now().plusMonths(1).toLocalDate().atTime(LocalTime.MAX);
+            LocalDateTime firstDayOfNextMonth = time.nextMonthTime().atTime(LocalTime.MIN);
+            LocalDateTime lastDayOfTheMonth = time.nextMonthTime().atTime(LocalTime.MAX);
             Month nextMonth = firstDayOfNextMonth.getMonth();
             return Collections.singletonList(new Period(firstDayOfNextMonth.withDayOfMonth(1),
                     lastDayOfTheMonth.withDayOfMonth(nextMonth.maxLength())));

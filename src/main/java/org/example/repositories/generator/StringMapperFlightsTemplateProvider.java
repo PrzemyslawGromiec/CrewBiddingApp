@@ -23,7 +23,6 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
         return lines.stream()
                 .map(line -> parseLineToFlight(line).orElse(null))
                 .filter(flight -> flight != null)
-                .peek(System.out::println)
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +56,7 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
             String part = parts[i];
             if (part.equalsIgnoreCase("DAY")) {
                 numOfDays = parts[i-1];
-                System.out.println(line);
+                //System.out.println(line);
                 durationDays = getNumOfDays(numOfDays);
                 break;
             }

@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.entities.*;
+import org.example.general.Time;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class RequestService {
     private FlightRequestFactory flightFactory = new FlightRequestFactory();
-    private EventRequestFactory eventFactory = new EventRequestFactory();
+    private EventRequestFactory eventFactory = new EventRequestFactory(Time.getTime());
     private EventService eventService;
 
     public RequestService(EventService eventService) {
