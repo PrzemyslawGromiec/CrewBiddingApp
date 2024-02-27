@@ -73,9 +73,8 @@ public class EventService {
         LocalDateTime startDateTime = generateEventDateTime(startDay, startTime);
         LocalDateTime endDateTime = generateEventDateTime(endDay, endTime);
         int priority = getEventPriority();
-        int eventId = eventRepository.getNextId();
 
-        Event createdEvent = new Event(eventId, startDateTime, endDateTime, priority, description);
+        Event createdEvent = new Event(startDateTime, endDateTime, priority, description);
         if (answer.equalsIgnoreCase("yes")) {
             createdEvent.setReoccurring(true);
         }

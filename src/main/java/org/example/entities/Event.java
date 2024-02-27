@@ -18,7 +18,7 @@ public class Event implements Serializable {
     private boolean reoccurring = false;
 
 
-    public Event(int id, LocalDateTime start, LocalDateTime end, int priority, String description) {
+    public Event(LocalDateTime start, LocalDateTime end, int priority, String description) {
         if (end.isBefore(start)) {
             throw new IllegalArgumentException("End time must be after start date.");
         }
@@ -83,6 +83,10 @@ public class Event implements Serializable {
                 ", priority=" + priority +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

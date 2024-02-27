@@ -8,6 +8,5 @@ import java.util.Optional;
 public interface EventRepository {
     List<Event> getEvents();
     void saveEvents(List<Event> events);
-    int getNextId();
     Optional<Event> removeById(int id);
 }

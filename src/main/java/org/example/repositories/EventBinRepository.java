@@ -36,6 +36,13 @@ public class EventBinRepository implements EventRepository {
 
     @Override
     public void saveEvents(List<Event> events) {
+        events.addAll(loadEvents());
+        for (Event event : events) {
+            if (event.getId() == 0) {
+                event.setId(++nextId);
+            }
+        }
+
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
             objectOutputStream.writeInt(nextId);
@@ -44,10 +51,6 @@ public class EventBinRepository implements EventRepository {
         } catch (IOException e) {
             throw new RuntimeException("Error saving events", e);
         }
-    }
-
-    public int getNextId() {
-        return nextId++;
     }
 
     private Optional<Event> findById(int id) {
