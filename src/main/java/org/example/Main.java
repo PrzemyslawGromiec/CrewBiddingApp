@@ -15,3 +15,25 @@ public class Main {
 
     }
 }
+
+/*
+*
+* Wczytanie lotów
+* Nalozenie preferncji
+* Wygenerowanie periodow
+* Wyliczenie lotow dla perioda
+* Nalozenie buforow
+* Decyzja ktory lot bierzemy
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* */

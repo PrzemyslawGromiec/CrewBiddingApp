@@ -8,21 +8,24 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class FlightPeriodController {
+
+
     private Scanner scanner = new Scanner(System.in);
     private List<Flight> generatedFlights;
 
-    Optional<Flight> chooseFlight(RequestService requestService, List<Flight> availableFlights) {
+    ChooseFlightResult chooseFlight(RequestService requestService, List<Flight> availableFlights) {
         generatedFlights = availableFlights;
-        //nie wyswietla zbednych komunikatow gdy lista jest pusta
+        //todo: rozszerzanie listy
+        //todo: czego brakuje
         if (availableFlights.isEmpty()) {
-            return Optional.empty();
+            return new ChooseFlightResult(ChooseFlightResult.Status.PERIOD_SKIPPED,Optional.empty());
         }
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
         if (flightChoice.noFlightsChosen()) {
             System.out.println("Moving to the next period.");
-            return Optional.empty();
+            return new ChooseFlightResult(ChooseFlightResult.Status.PERIOD_SKIPPED,Optional.empty());
         }
 
         Flight chosenFlight = generatedFlights.get(flightChoice.getChosenFlightIndex());
@@ -30,7 +33,7 @@ public class FlightPeriodController {
         System.out.println(chosenFlight);
         displayFlightInfoLimits(chosenFlight);
         requestService.buildRequest(chosenFlight, flightChoice.getPriority());
-        return Optional.of(chosenFlight);
+        return new ChooseFlightResult(ChooseFlightResult.Status.FLIGHT_CHOSEN,Optional.empty());
     }
 
     private void displayFlightInfoLimits(Flight flight) {
@@ -46,6 +49,11 @@ public class FlightPeriodController {
         FlightChoice(String userInput) {
             this.userInput = userInput;
             if (noFlightsChosen()) {
+                valid = true;
+                return;
+            }
+
+            if (userInput.equalsIgnoreCase("all")) {
                 valid = true;
                 return;
             }
@@ -115,11 +123,13 @@ public class FlightPeriodController {
         System.out.println("Enter flight number you want to choose and its priority:");
         System.out.println("in the format of 'flight number / priority '.");
         System.out.println("Enter 0 to go to the next period.");
+        System.out.println("Enter \"all\" to extend list of flights");
         String userInput = scanner.nextLine();
         FlightChoice flightChoice = new FlightChoice(userInput);
         if (flightChoice.isNotValid()) {
             return readFlightChoice();
         }
+
         return flightChoice;
 
     }

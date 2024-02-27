@@ -22,17 +22,16 @@ public class FlightController {
     }
 
     public List<FlightRequest> chooseFlightsForPeriods(List<Period> generatedPeriods) {
-
         for (Period generatedPeriod : generatedPeriods) {
-            processSinglePeriod(generatedPeriod);
+            processSinglePeriod(generatedPeriod, false);
         }
         return requestService.getFlightRequests();
     }
 
-    private void processSinglePeriod(Period period) {
+    private void processSinglePeriod(Period period, boolean showAllDurations) {
         System.out.println("Processing period: " + period);
 
-        List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(period);
+        List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(period,showAllDurations);
         if (flightsForCurrentPeriod.isEmpty()) {
             System.out.println("No flights for this period");
             return;
@@ -40,17 +39,22 @@ public class FlightController {
 
         List<Flight> availableFlights = requestService.filterBuffer(flightsForCurrentPeriod, period);
 
-        Optional<Flight> selectedFlight = periodController.chooseFlight(requestService, availableFlights);
+        ChooseFlightResult result = periodController.chooseFlight(requestService, availableFlights);
 
-        if (selectedFlight.isEmpty()) {
+        if (result.getStatus() == ChooseFlightResult.Status.PERIOD_SKIPPED) {
             System.out.println("No flight selected for this period.");
             return;
         }
 
-        List<Period> newCreatedPeriods = period.splitPeriodAroundSelectedFlight(selectedFlight.orElseThrow());
+        if (result.getStatus() == ChooseFlightResult.Status.SHOW_ALL_DURATIONS) {
+            processSinglePeriod(period, true);
+            return;
+        }
 
-        processSinglePeriod(newCreatedPeriods.get(0));
-        processSinglePeriod(newCreatedPeriods.get(1));
+        List<Period> newCreatedPeriods = period.splitPeriodAroundSelectedFlight(result.getFlight().orElseThrow());
+
+        processSinglePeriod(newCreatedPeriods.get(0),true);
+        processSinglePeriod(newCreatedPeriods.get(1),true);
     }
 }
 
