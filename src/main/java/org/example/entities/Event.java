@@ -5,6 +5,7 @@ import org.example.general.Time;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -82,5 +83,31 @@ public class Event implements Serializable {
                 ", priority=" + priority +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (priority != event.priority) return false;
+        if (id != event.id) return false;
+        if (reoccurring != event.reoccurring) return false;
+        if (!Objects.equals(start, event.start)) return false;
+        if (!Objects.equals(end, event.end)) return false;
+        return Objects.equals(description, event.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start != null ? start.hashCode() : 0;
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        result = 31 * result + priority;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + id;
+        result = 31 * result + (reoccurring ? 1 : 0);
+        return result;
     }
 }
