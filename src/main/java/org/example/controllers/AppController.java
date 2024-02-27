@@ -5,6 +5,7 @@ import org.example.repositories.*;
 import org.example.repositories.generator.FlightGeneratorFacade;
 import org.example.repositories.generator.Source;
 import org.example.services.*;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class AppController {
     private PeriodFactory periodFactory;
     private FlightController flightController;
     private RequestService requestService;
+    private PreferenceController preferenceController;
 
 
     public AppController() throws FileNotFoundException {
@@ -27,6 +29,7 @@ public class AppController {
         this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);
         this.reportService = new ReportService();
+        this.preferenceController = new PreferenceController();
     }
 
     public void run() {
@@ -61,9 +64,8 @@ public class AppController {
 
                 }
                 case 2 -> modifyRequests();
-                case 3 ->
+                case 3 -> preferenceController.updatePreferences();
                     //your preferences and requirements
-                        System.out.println("Add your aircraft types");
                 case 4 -> System.out.println("Bye bye!");
                 default -> System.out.println("Incorrect choice. Try again.");
             }
@@ -103,6 +105,7 @@ public class AppController {
             modifyRequests();
         }
     }
+
 
     public boolean isUserInputValid(String input) {
         if (input == null || input.isEmpty()) {
