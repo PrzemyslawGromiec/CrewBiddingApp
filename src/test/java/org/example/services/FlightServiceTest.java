@@ -21,7 +21,7 @@ public class FlightServiceTest {
     public void flightGenerator(){
         DummyFlightsProvider flightsProvider = new DummyFlightsProvider();
 
-        FlightService flightService = new FlightService(flightsProvider);
+        FlightService flightService = new FlightService(flightsProvider, preferencesService);
         flightsProvider.setToday(LocalDate.of(2023,11,28));
 
         List<Flight> wawFlight = flightsProvider.generateCustomRecurringFlights("BA210", "WAW",
@@ -41,7 +41,7 @@ public class FlightServiceTest {
     public void fillingPeriodWithFlights() {
         Period period = new Period(LocalDateTime.of(2024,1,12,5,0),
                 LocalDateTime.of(2024,1,13,23,0));
-        FlightService flightService = new FlightService(new DummyFlightsProvider());
+        FlightService flightService = new FlightService(new DummyFlightsProvider(), preferencesService);
 
         List<Flight> flights = flightService.generateFlightsForPeriod(period);
 

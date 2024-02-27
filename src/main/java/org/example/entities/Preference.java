@@ -36,4 +36,8 @@ public class Preference {
     public void removeType (AircraftType type) {
         types.remove(type);
     }
+
+    public boolean containsAircraftType(AircraftType type){
+        return types.contains(type);
+    }
 }

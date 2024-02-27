@@ -2,15 +2,20 @@ package org.example.controllers;
 
 import org.example.entities.AircraftType;
 import org.example.entities.Preference;
+import org.example.services.PreferencesService;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class PreferenceController {
-    private Preference preference = new Preference();
+    private PreferencesService preferencesService;
     private Scanner scanner = new Scanner(System.in);
 
+    public PreferenceController(PreferencesService preferencesService) {
+        this.preferencesService = preferencesService;
+    }
+
     void updatePreferences() {
+        Preference preference = preferencesService.getModifiablePreferences();;
         System.out.println("Your current preferences:");
         System.out.println(preference.getMaxFlightHours());
         System.out.println(preference.getMinFlightHours());
@@ -25,7 +30,7 @@ public class PreferenceController {
 
         } else if (userInput.equals("2")) {
             System.out.println("Enter new time in hours as a number:");
-            preference.setMaxFlightHours(scanner.nextInt(scanner.nextInt()));
+            preference.setMaxFlightHours(scanner.nextInt());
 
         } else if (userInput.equals("3")) {
             System.out.println("Enter new aircraft type: ");
@@ -39,6 +44,5 @@ public class PreferenceController {
         } else {
             System.out.println("Invalid option.");
         }
-        updatePreferences();
     }
 }

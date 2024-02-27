@@ -23,13 +23,14 @@ public class AppController {
 
 
     public AppController() throws FileNotFoundException {
+        PreferencesService preferencesService = new PreferencesService();
         this.eventService = new EventService(new EventBinRepository());
-        this.flightService = new FlightService(FlightGeneratorFacade.Factory.createFlightFacade(Source.FILE));
+        this.flightService = new FlightService(FlightGeneratorFacade.Factory.createFlightFacade(Source.FILE), preferencesService);
         this.periodFactory = new PeriodFactory();
         this.requestService = new RequestService(eventService);
         this.flightController = new FlightController(flightService, requestService);
         this.reportService = new ReportService();
-        this.preferenceController = new PreferenceController();
+        this.preferenceController = new PreferenceController(preferencesService);
     }
 
     public void run() {
@@ -41,6 +42,7 @@ public class AppController {
 
             switch (choice) {
                 case 1 -> {
+                    flightService.applyPreferences();
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
                     List<EventRequest> eventRequests = requestService.getEventRequests();
                     List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);
@@ -48,6 +50,7 @@ public class AppController {
                         System.out.println(generatedPeriod);
                     }
                     System.out.println();
+
                     List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
                     System.out.println();
                     System.out.println("Your flight eventRequests:");
