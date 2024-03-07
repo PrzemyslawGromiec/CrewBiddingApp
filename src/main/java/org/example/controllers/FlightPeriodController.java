@@ -15,17 +15,17 @@ public class FlightPeriodController {
 
     ChooseFlightResult chooseFlight(RequestService requestService, List<Flight> availableFlights) {
         generatedFlights = availableFlights;
-        //todo: rozszerzanie listy
-        //todo: czego brakuje
-        if (availableFlights.isEmpty()) {
-            return new ChooseFlightResult(ChooseFlightResult.Status.PERIOD_SKIPPED,Optional.empty());
-        }
         printListOfFlights(generatedFlights);
         FlightChoice flightChoice = readFlightChoice();
 
         if (flightChoice.noFlightsChosen()) {
             System.out.println("Moving to the next period.");
             return new ChooseFlightResult(ChooseFlightResult.Status.PERIOD_SKIPPED,Optional.empty());
+        }
+
+        if(flightChoice.extendListOfFlights()) {
+            System.out.println("Extended list of flights");
+            return new ChooseFlightResult(ChooseFlightResult.Status.SHOW_ALL_DURATIONS,Optional.empty());
         }
 
         Flight chosenFlight = generatedFlights.get(flightChoice.getChosenFlightIndex());
@@ -93,6 +93,10 @@ public class FlightPeriodController {
 
         boolean noFlightsChosen() {
             return "0".equals(userInput.trim());
+        }
+
+        boolean extendListOfFlights() {
+            return "all".equalsIgnoreCase(userInput.trim());
         }
 
         public boolean isNotValid() {
