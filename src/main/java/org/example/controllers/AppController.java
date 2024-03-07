@@ -88,7 +88,7 @@ public class AppController {
         System.out.println("What would you like to do?");
         System.out.println("1. Help me to create my schedule.");
         System.out.println("2. Modify (add/delete) your requests.");
-        System.out.println("3. Add your current trainings.");
+        System.out.println("3. Update your preferences (aircraft types, min, max flight time.");
         System.out.println("4. End the application.");
     }
 

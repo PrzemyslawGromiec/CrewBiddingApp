@@ -38,7 +38,7 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    //todo add sort and remove metod for tests
+    //todo add sort and remove method for tests
     public List<Flight> getFlightsForPeriod(Period period, boolean allDurations) {
         Preference preference = preferencesService.getModifiablePreferences();
         return flights.stream()

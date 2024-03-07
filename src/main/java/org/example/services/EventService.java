@@ -7,7 +7,6 @@ import org.example.repositories.EventRepository;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class EventService {
     private Scanner scanner = new Scanner(System.in);
@@ -39,7 +38,7 @@ public class EventService {
             }
         } while (doYouWantContinue());
         showEvents();
-        eventRepository.saveEvents(newEvents);
+        eventRepository.addEvents(newEvents);
     }
 
     private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime hour) {
@@ -48,8 +47,6 @@ public class EventService {
     }
 
     private Event createEvent() {
-        //TODO: wpisujac dzien istnieje opcja zabookowania calego dnia lub od razu dodanie godziny
-
         Month eventMonth = time.nextMonthTime().getMonth();
         System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");

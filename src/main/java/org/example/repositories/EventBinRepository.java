@@ -19,7 +19,7 @@ public class EventBinRepository implements EventRepository {
             if (file.exists()) {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 nextId = objectInputStream.readInt();
-                List<Event>  events = (List<Event>) objectInputStream.readObject();
+                List<Event> events = (List<Event>) objectInputStream.readObject();
                 objectInputStream.close();
                 return events;
             }
@@ -35,7 +35,7 @@ public class EventBinRepository implements EventRepository {
     }
 
     @Override
-    public void saveEvents(List<Event> events) {
+    public void addEvents(List<Event> events) {
         events.addAll(loadEvents());
         for (Event event : events) {
             if (event.getId() == 0) {
@@ -43,14 +43,7 @@ public class EventBinRepository implements EventRepository {
             }
         }
 
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
-            objectOutputStream.writeInt(nextId);
-            objectOutputStream.writeObject(new ArrayList<>(events));
-            objectOutputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Error saving events", e);
-        }
+        overrideEventInFile(events);
     }
 
     private Optional<Event> findById(int id) {
@@ -69,10 +62,21 @@ public class EventBinRepository implements EventRepository {
             Event eventToBeRemoved = optionalEvent.get();
             List<Event> events = getEvents();
             events.remove(eventToBeRemoved);
-            saveEvents(events);
+            overrideEventInFile(events);
             return Optional.of(eventToBeRemoved);
         } else {
             return Optional.empty();
+        }
+    }
+
+    private void overrideEventInFile(List<Event> events) {
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
+            objectOutputStream.writeInt(nextId);
+            objectOutputStream.writeObject(new ArrayList<>(events));
+            objectOutputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving events", e);
         }
     }
 
