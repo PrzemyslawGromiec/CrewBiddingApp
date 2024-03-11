@@ -98,6 +98,7 @@ public class Flight {
     }
 
 
+    //todo: poprawic czytelnosc - dzien, godzina lotu
     @Override
     public String toString() {
         return "Flight{" +

@@ -7,7 +7,6 @@ import org.example.entities.Flight;
 import org.example.services.RequestService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 

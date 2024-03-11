@@ -42,7 +42,7 @@ public class AppController {
 
             switch (choice) {
                 case 1 -> {
-                    flightService.applyPreferences();
+                    flightService.applyAircraftTypePreference();
                     System.out.println(flightService.getFlights().size() + " flights loaded.");
                     List<EventRequest> eventRequests = requestService.getEventRequests();
                     List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);

@@ -19,11 +19,9 @@ public class FlightService {
         flights.addAll(flightGenerator.generateFlights());
     }
 
-    public void applyPreferences () {
+    public void applyAircraftTypePreference() {
         Preference preference = preferencesService.getModifiablePreferences();
         flights = flights.stream()
-                .filter(flight -> flight.getFlightDuration().toHours() >= preference.getMinFlightHours())
-                .filter(flight -> flight.getFlightDuration().toHours() <= preference.getMaxFlightHours())
                 .filter(flight -> preference.containsAircraftType(flight.getAircraftType()))
                 .collect(Collectors.toList());
     }
@@ -38,11 +36,10 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    //todo add sort and remove method for tests
     public List<Flight> getFlightsForPeriod(Period period, boolean allDurations) {
         Preference preference = preferencesService.getModifiablePreferences();
         return flights.stream()
-                .filter(flight ->allDurations || preferredDuration(preference, flight))
+                .filter(flight -> allDurations || preferredDuration(preference, flight))
                 .filter(flight -> preference.containsAircraftType(flight.getAircraftType()))
                 .filter(flight -> !flight.getReportTime().isBefore(period.getStartTime())
                         && !flight.getClearTime().isAfter(period.getEndTime()))
