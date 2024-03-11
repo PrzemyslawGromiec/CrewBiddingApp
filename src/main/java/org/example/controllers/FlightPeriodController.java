@@ -33,7 +33,7 @@ public class FlightPeriodController {
         System.out.println(chosenFlight);
         displayFlightInfoLimits(chosenFlight);
         requestService.buildRequest(chosenFlight, flightChoice.getPriority());
-        return new ChooseFlightResult(ChooseFlightResult.Status.FLIGHT_CHOSEN,Optional.empty());
+        return new ChooseFlightResult(ChooseFlightResult.Status.FLIGHT_CHOSEN,Optional.of(chosenFlight));
     }
 
     private void displayFlightInfoLimits(Flight flight) {
@@ -140,10 +140,20 @@ public class FlightPeriodController {
 
 
     private void printListOfFlights(List<Flight> flights) {
-        System.out.println("FlightsTest.txt available in this period: ");
+        System.out.println("available in this period: ");
         for (int i = 0; i < flights.size(); i++) {
             Flight generatedFlight = flights.get(i);
             System.out.println("NR: " + (i + 1) + " " + generatedFlight);
         }
     }
 }
+//Period{startTime = 2024-04-01T10:05, endTime = 2024-04-02T18:45, duration: PT32H40M}
+
+/*
+*
+* Period{startTime = 01T00:00, endTime = 02T23:59:59.999999999, duration: PT47H59M59.999999999S}
+*                   , clearTime=01T10:05,
+*
+* New period: Period{startTime 01T10:05, endTime = 2024-04-02T23:59:59.999999999, duration: PT37H54M59.999999999S}
+*
+* */

@@ -29,9 +29,9 @@ public class RequestService {
         flightFactory.buildRequest(chosenFlight, priority);
     }
 
-    public List<Flight> filterBuffer(List<Flight> flightsForCurrentPeriod, Period period) {
+    //todo: stream
+    public List<Flight> filterBuffer(List<Flight> flightsForCurrentPeriod) {
         List<Flight> availableFlights = new ArrayList<>();
-        flightsForCurrentPeriod = flightsAfterDayOff(flightsForCurrentPeriod, period);
 
         for (Flight flight : flightsForCurrentPeriod) {
             boolean isValid = true;
@@ -46,18 +46,7 @@ public class RequestService {
                 availableFlights.add(flight);
             }
         }
-
-
         return availableFlights;
     }
 
-    //you can start flying min at 6AM after day off
-    public List<Flight> flightsAfterDayOff(List<Flight> flights, Period period) {
-
-        LocalDateTime six = period.getStartTime().withHour(6).withMinute(0).withSecond(0);
-        return flights.stream()
-                .filter(flight -> flight.getReportTime().isAfter(six))
-                .sorted(Comparator.comparing(Flight::getReportTime))
-                .collect(Collectors.toList());
-    }
 }

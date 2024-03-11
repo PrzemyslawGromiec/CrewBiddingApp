@@ -45,16 +45,18 @@ public class FlightController {
         System.out.println("Processing period: " + period);
 
         List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(period,showAllDurations);
+        List<Flight> availableFlights = requestService.filterBuffer(flightsForCurrentPeriod);
         //flight service daja nam albo ograniczone loty albo wszystkie
         String noFlightsMessage = "No flights for this period";
-        if (flightsForCurrentPeriod.isEmpty()) {
+        if (availableFlights.isEmpty()) {
             if (showAllDurations) {
                 System.out.println(noFlightsMessage);
               return;
             }
 
             flightsForCurrentPeriod = flightService.getFlightsForPeriod(period, true);
-            if (flightsForCurrentPeriod.isEmpty()) {
+            availableFlights = requestService.filterBuffer(flightsForCurrentPeriod);
+            if (availableFlights.isEmpty()) {
                 System.out.println(noFlightsMessage);
                 return;
             }
@@ -67,8 +69,6 @@ public class FlightController {
 
             //jeśli jest empty to może są jeszcze ukryte loty które chcielibysmy pokazać, czyli te na all duration =true
         }
-
-        List<Flight> availableFlights = requestService.filterBuffer(flightsForCurrentPeriod, period);
 
         ChooseFlightResult result = periodController.chooseFlight(requestService, availableFlights);
 

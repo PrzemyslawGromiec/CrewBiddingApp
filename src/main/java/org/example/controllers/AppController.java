@@ -76,7 +76,7 @@ public class AppController {
         } while (choice != 4);
 
     }
-
+    //todo: wyswietlac szczegoly lotu na koniec
     private void displayFinalReport(Report report) {
         List<Request> requests = report.getRequests();
         for (Request request : requests) {
