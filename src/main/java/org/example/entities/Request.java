@@ -28,8 +28,8 @@ public abstract class Request {
                 "end time = " + getEndTime() + " " +
                 "type = " + getType() + " " +
                 "points = " + getPoints() +
-                ", numberOfStars = " + getNumberOfStars() +
-                '}';
+                ", numberOfStars = " + getNumberOfStars();
+
     }
 }
 

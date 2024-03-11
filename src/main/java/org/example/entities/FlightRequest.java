@@ -3,7 +3,7 @@ package org.example.entities;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class FlightRequest extends Request{
+public class FlightRequest extends Request {
     private Flight flight;
     private int numOfStars;
 
@@ -39,7 +39,7 @@ public class FlightRequest extends Request{
 
     @Override
     public String toString() {
-        return "FlightRequest{" +
+        return super.toString() +
                 "flight=" + flight +
                 ", numOfStars=" + numOfStars +
                 '}';

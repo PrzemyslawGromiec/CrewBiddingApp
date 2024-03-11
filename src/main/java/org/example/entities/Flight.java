@@ -101,13 +101,11 @@ public class Flight {
     //todo: poprawic czytelnosc - dzien, godzina lotu
     @Override
     public String toString() {
-        return "Flight{" +
-                "flightNumber='" + flightNumber + '\'' +
+        return "flightNumber='" + flightNumber + '\'' +
                 ", airportCode='" + airportCode + '\'' +
                 ", reportTime=" + reportTime +
                 ", clearTime=" + clearTime +
                 ", aircraftType=" + aircraftType +
-                ", favourite=" + favourite +
                 ", duration=" + getFlightDuration() +
                 '}';
     }

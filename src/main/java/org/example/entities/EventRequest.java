@@ -40,7 +40,8 @@ public class EventRequest extends Request {
 
     @Override
     public String toString() {
-        return "EventRequest{" +
+
+        return  super.toString() +
                 "events=" + events +
                 '}';
     }

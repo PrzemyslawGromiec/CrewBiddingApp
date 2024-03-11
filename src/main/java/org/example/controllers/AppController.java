@@ -79,8 +79,9 @@ public class AppController {
     //todo: wyswietlac szczegoly lotu na koniec
     private void displayFinalReport(Report report) {
         List<Request> requests = report.getRequests();
+        System.out.println("Printing final report:");
         for (Request request : requests) {
-            System.out.println("Date:" + request.getStartTime() + " Type:" + request.getType() + " Points:" + request.getPoints());
+            System.out.println(request);
         }
     }
 
