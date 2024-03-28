@@ -15,30 +15,30 @@ public class PeriodFactory {
 
     private Time time = Time.getTime();
 
-    //todo: refaktoryzacja - metoda budujaca period
     public List<Period> createPeriodsBetweenRequests(List<EventRequest> requests) {
         List<Period> createdPeriods = new ArrayList<>();
+
         if (requests.isEmpty()) {
-            return Collections.singletonList(nextMonthPeriod());
+            Period fullMonthPeriod = nextMonthPeriod();
+            return Collections.singletonList(fullMonthPeriod);
         }
 
         EventRequest firstRequest = requests.get(0);
-
         if (firstRequest.getStartTime().getDayOfMonth() != 1) {
-            //zaczynamy od pierwszego dnia miesiaca do jeden dzien przed requestem
-            createdPeriods.add(nextMonthPeriod(firstRequest.getStartTime()));
+            Period firstDayOfMonthPeriod = nextMonthPeriod(firstRequest.getStartTime());
+            createdPeriods.add(firstDayOfMonthPeriod);
         }
-        EventRequest previousEventRequest = firstRequest;
 
+        EventRequest previousEventRequest = firstRequest;
         for (int i = 1; i < requests.size(); i++) {
             EventRequest currentEventRequest = requests.get(i);
-            //period zaczyna sie dzien po poprzednim i dzien przed aktualnym periodem
-            Period period = nextMonthPeriod(previousEventRequest.getEndTime(),currentEventRequest.getStartTime());
-            if (period.getStartTime().isBefore(period.getEndTime())) {
-                createdPeriods.add(period);
+            Period betweenEventsPeriod = nextMonthPeriod(previousEventRequest.getEndTime(),currentEventRequest.getStartTime());
+            if (betweenEventsPeriod.getStartTime().isBefore(betweenEventsPeriod.getEndTime())) {
+                createdPeriods.add(betweenEventsPeriod);
             }
             previousEventRequest = currentEventRequest;
         }
+
         return createdPeriods;
     }
 
@@ -46,7 +46,7 @@ public class PeriodFactory {
         return nextMonthPeriod(time.nextMonthTime().plusMonths(1).withDayOfMonth(1));
     }
     private Period nextMonthPeriod(LocalDateTime endBeforeThis) {
-        return nextMonthPeriod(time.nextMonthTime(),endBeforeThis);
+        return nextMonthPeriod(time.nextMonthTime().withDayOfMonth(1).minusDays(1),endBeforeThis);
     }
 
     private Period nextMonthPeriod(LocalDateTime startAfterThis, LocalDateTime endBeforeThis) {
