@@ -146,12 +146,13 @@ public class FlightPeriodController {
     private void printListOfFlights(List<Flight> flights) {
 
         System.out.println();
-        System.out.printf("--------------------------------------------------------------------------%n");
-        int totalWidth = 78;
-        String availableFlightsText = "Available flights";
+        String headerLinePattern = "--";
+        System.out.println(headerLinePattern.repeat(72));
+        int totalWidth = 144;
+        String availableFlightsText = "AVAILABLE FLIGHTS";
         int leadingSpaces = (totalWidth - availableFlightsText.length()) / 2;
         System.out.printf("%" + leadingSpaces + "s%s%" + leadingSpaces + "s%n", "", availableFlightsText, "");
-        System.out.printf("--------------------------------------------------------------------------%n");
+        System.out.println(headerLinePattern.repeat(72));
         String header = String.format(LINE_FORMAT,
                 "ID", "FLT NUMBER", "DEST", "REPORT", "CLEAR", "AIRCRAFT");
         System.out.println(header.repeat(2));

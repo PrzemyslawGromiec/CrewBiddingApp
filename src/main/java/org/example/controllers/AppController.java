@@ -8,8 +8,10 @@ import org.example.services.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AppController {
 
@@ -90,8 +92,10 @@ public class AppController {
 
     private void displayFinalReport(Report report) {
         List<Request> requests = report.getRequests();
+        List<Request> sortedByPoints = requests.stream()
+                        .sorted(Comparator.comparing(Request::getPoints).reversed()).toList();
         System.out.println("\nPrinting final report:");
-        for (Request request : requests) {
+        for (Request request : sortedByPoints) {
             System.out.println(request);
         }
     }

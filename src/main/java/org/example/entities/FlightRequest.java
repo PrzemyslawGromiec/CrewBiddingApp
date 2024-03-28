@@ -39,9 +39,7 @@ public class FlightRequest extends Request {
 
     @Override
     public String toString() {
-        return super.toString() +
-                "flight = " + flight +
-                ", numOfStars=" + numOfStars +
-                '}';
+        return "flight -> " + flight +
+                super.toString();
     }
 }

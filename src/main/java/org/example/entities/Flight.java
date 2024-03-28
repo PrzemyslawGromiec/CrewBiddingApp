@@ -104,12 +104,12 @@ public class Flight {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM h:mma", Locale.ENGLISH);
         String formattedReport = getReportTime().format(formatter);
         String formattedClear = getClearTime().format(formatter);
-        return flightNumber + '\'' +
+        return flightNumber +
                 ", destination: " + airportCode + '\'' +
-                ", reportTime = " + formattedReport +
-                ", clearTime = " + formattedClear +
-                ", aircraftType = " + aircraftType +
-                ", duration = " + getFlightDuration() +
-                '}';
+                ", report time: " + formattedReport +
+                ", clear time: " + formattedClear +
+                ", aircraft: " + aircraftType +
+                ", duration: " + getFlightDuration();
+
     }
 }

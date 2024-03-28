@@ -1,9 +1,11 @@
 package org.example.entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class EventRequest extends Request {
     private List<Event> events;
@@ -20,7 +22,7 @@ public class EventRequest extends Request {
 
     @Override
     public LocalDateTime getEndTime() {
-        return events.get(events.size()-1).getEnd();
+        return events.get(events.size() - 1).getEnd();
     }
 
 
@@ -38,11 +40,17 @@ public class EventRequest extends Request {
         return events;
     }
 
+    public String getEventDescription() {
+        return events.get(0).getDescription();
+    }
+
     @Override
     public String toString() {
-
-        return  super.toString() +
-                "events=" + events +
-                '}';
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM h:mma", Locale.ENGLISH);
+        String formattedReport = getStartTime().format(formatter);
+        String formattedClear = getEndTime().format(formatter);
+        return "event -> " + "start: " + formattedReport +
+                " ,end: " + formattedClear +
+                " ,description: " + getEventDescription() + super.toString();
     }
 }

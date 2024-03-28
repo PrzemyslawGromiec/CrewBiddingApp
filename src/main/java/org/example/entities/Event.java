@@ -70,6 +70,10 @@ public class Event implements Serializable {
         return id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setReoccurring(boolean reoccurring) {
         this.reoccurring = reoccurring;
     }

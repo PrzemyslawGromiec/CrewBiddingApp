@@ -23,13 +23,7 @@ public abstract class Request {
 
     @Override
     public String toString() {
-        return "Request : ";
-              /*  "start time = " + getStartTime() + " " +
-                "end time = " + getEndTime() + " " +
-                "type = " + getType() + " " +
-                "points = " + getPoints() +
-                ", numberOfStars = " + getNumberOfStars()
-                ;*/
+        return " ,request points: " + getPoints();
     }
 }
 
