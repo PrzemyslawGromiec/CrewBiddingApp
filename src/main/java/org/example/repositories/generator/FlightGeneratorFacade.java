@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class FlightGeneratorFacade {
 
@@ -33,7 +32,7 @@ public class FlightGeneratorFacade {
 
     private List<Flight> generateCustomRecurringFlights(FlightTemplate flightTemplate) {
         List<Flight> flights = new ArrayList<>();
-        LocalDate nextMonth = time.nextMonthTime();
+        LocalDate nextMonth = time.nextMonthLocalDate();
         for (int day = 1; day <= nextMonth.getMonth().maxLength(); day++) {
             if (!flightTemplate.flightsOn(nextMonth.withDayOfMonth(day).getDayOfWeek())) {
                 continue;

@@ -42,12 +42,12 @@ public class EventService {
     }
 
     private LocalDateTime generateEventDateTime(int dayOfMonth, LocalTime hour) {
-        LocalDate twoMonthsAhead = time.nextMonthTime().withDayOfMonth(dayOfMonth);
+        LocalDate twoMonthsAhead = time.nextMonthLocalDate().withDayOfMonth(dayOfMonth);
         return LocalDateTime.of(twoMonthsAhead, hour);
     }
 
     private Event createEvent() {
-        Month eventMonth = time.nextMonthTime().getMonth();
+        Month eventMonth = time.nextMonthLocalDate().getMonth();
         System.out.println("Remember that you're adding events for the next month: " + eventMonth);
         System.out.println("Add event description below:");
         String description = scanner.nextLine();

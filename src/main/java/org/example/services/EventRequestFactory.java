@@ -17,8 +17,8 @@ public class EventRequestFactory {
     }
 
     public List<EventRequest> createRequests(List<Event> events) {
-        List<Event> sortedAndFilteredEvents = events.stream().filter(event -> event.getStart().getMonth() == time.nextMonthTime().getMonth()
-                        || event.getEnd().getMonth() == time.nextMonthTime().getMonth())
+        List<Event> sortedAndFilteredEvents = events.stream().filter(event -> event.getStart().getMonth() == time.nextMonthLocalDate().getMonth()
+                        || event.getEnd().getMonth() == time.nextMonthLocalDate().getMonth())
                 .sorted(Comparator.comparing(Event::getStart)).toList();
 
         List<List<Event>> groupedEvents = new ArrayList<>();

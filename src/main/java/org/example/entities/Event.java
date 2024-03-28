@@ -60,7 +60,7 @@ public class Event implements Serializable {
     }
 
     private LocalDateTime withAppTime(LocalDateTime time, int plusMonth) {
-        return time.withMonth(Time.getTime().nextMonthTime().plusMonths(plusMonth).getMonthValue());
+        return time.withMonth(Time.getTime().nextMonthLocalDate().plusMonths(plusMonth).getMonthValue());
     }
     public int getPriority() {
         return priority;

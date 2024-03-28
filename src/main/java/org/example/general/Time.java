@@ -1,6 +1,8 @@
 package org.example.general;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Time {
     private LocalDate today = LocalDate.now().plusMonths(0);
@@ -9,8 +11,12 @@ public class Time {
     private Time() {
     }
 
-    public LocalDate nextMonthTime() {
+    public LocalDate nextMonthLocalDate() {
         return today.plusMonths(1);
+    }
+
+    public LocalDateTime nextMonthTime() {
+        return nextMonthLocalDate().atTime(LocalTime.MIN);
     }
 
     public static Time getTime() {
