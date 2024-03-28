@@ -34,12 +34,10 @@ public class FlightController {
     //Period: 0 pasuje 150 full
     //Period: 0 pasuje 0 full
 
-
     //Period: 0 / wiecej
 
 
-
-
+    //todo: przestudiowac!
     private void processSinglePeriod(Period period, boolean showAllDurations) {
         System.out.println("Processing period: " + period);
 
@@ -59,10 +57,17 @@ public class FlightController {
                 return;
             }
             System.out.println("Available " + flightsForCurrentPeriod.size() + " flights for extended criteria." +
-                    "Do you want to consider them?");
-            String userChoice = scanner.nextLine();
-            if (userChoice.equalsIgnoreCase("no")) {
-                return;
+                    "Do you want to consider them? (type \"yes\" or \"no\")");
+
+            while (true) {
+                String userChoice = scanner.nextLine();
+                if (userChoice.equalsIgnoreCase("no")) {
+                    return;
+                } else if (userChoice.equalsIgnoreCase("yes")) {
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please type \"yes\" or \"no\".");
+                }
             }
         }
 
