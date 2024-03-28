@@ -29,9 +29,18 @@ public class RequestService {
         flightFactory.buildRequest(chosenFlight, priority);
     }
 
-    //todo: stream
     public List<Flight> filterBuffer(List<Flight> flightsForCurrentPeriod) {
-        List<Flight> availableFlights = new ArrayList<>();
+        return flightsForCurrentPeriod.stream()
+                .filter(this::isValidFlight)
+                .sorted(Comparator.comparing(Flight::getReportTime))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isValidFlight(Flight flight) {
+        return flightFactory.getRequests().stream()
+                .allMatch(request -> request.getFlight().isValidFlightInPeriod(flight));
+
+       /* List<Flight> availableFlights = new ArrayList<>();
 
         for (Flight flight : flightsForCurrentPeriod) {
             boolean isValid = true;
@@ -45,8 +54,13 @@ public class RequestService {
             if (isValid) {
                 availableFlights.add(flight);
             }
+
         }
-        return availableFlights;
+        List<Flight> sortedFlights = availableFlights.stream()
+                .sorted(Comparator.comparing(Flight::getReportTime))
+                .toList();
+
+        return sortedFlights;*/
     }
 
 }

@@ -7,6 +7,7 @@ import org.example.repositories.generator.Source;
 import org.example.services.*;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,53 +34,63 @@ public class AppController {
         this.preferenceController = new PreferenceController(preferencesService);
     }
 
-    public void run() {
+    public void runMenu() {
         int choice;
         System.out.println("Welcome to the crew bidding system!");
         do {
             displayMenu();
             choice = getValidOption();
-
-            switch (choice) {
-                case 1 -> {
-                    flightService.applyAircraftTypePreference();
-                    System.out.println(flightService.getFlights().size() + " flights loaded.");
-                    List<EventRequest> eventRequests = requestService.getEventRequests();
-                    List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);
-                    for (Period generatedPeriod : generatedPeriods) {
-                        System.out.println(generatedPeriod);
-                    }
-                    System.out.println();
-
-                    List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
-                    System.out.println();
-                    System.out.println("Your flight eventRequests:");
-                    for (FlightRequest flightRequest : flightRequests) {
-                        System.out.println(flightRequest);
-                    }
-                    System.out.println("Your event eventRequests:");
-                    for (EventRequest request : eventRequests) {
-                        System.out.println(request);
-                    }
-
-                    Report report = reportService.finalizedReport(flightRequests, eventRequests);
-                    displayFinalReport(report);
-
-                }
-                case 2 -> modifyRequests();
-                case 3 -> preferenceController.updatePreferences();
-                    //your preferences and requirements
-                case 4 -> System.out.println("Bye bye!");
-                default -> System.out.println("Incorrect choice. Try again.");
-            }
-
+            executeChoice(choice);
         } while (choice != 4);
-
     }
-    //todo: wyswietlac szczegoly lotu na koniec
+
+    private void executeChoice(int choice) {
+        switch (choice) {
+            case 1 -> createSchedule();
+            case 2 -> modifyRequests();
+            case 3 -> preferenceController.updatePreferences();
+            case 4 -> System.out.println("Bye bye!");
+            default -> System.out.println("Incorrect choice. Try again.");
+        }
+    }
+
+    private void createSchedule() {
+        flightService.applyAircraftTypePreference();
+        System.out.println(flightService.getFlights().size() + " flights loaded.");
+
+        List<EventRequest> eventRequests = requestService.getEventRequests();
+        List<Period> generatedPeriods = getGeneratedPeriods(eventRequests);
+        System.out.println();
+        List<FlightRequest> flightRequests = flightController.chooseFlightsForPeriods(generatedPeriods);
+
+        List<Request> allRequests = new ArrayList<>(eventRequests);
+        allRequests.addAll(flightRequests);
+
+        System.out.println("Your requests: ");
+        displayRequests(allRequests);
+
+        Report report = reportService.finalizedReport(flightRequests, eventRequests);
+        displayFinalReport(report);
+    }
+
+    private void displayRequests (List<Request> requests) {
+        for (Request request : requests) {
+            System.out.println(request);
+        }
+    }
+
+    private List<Period> getGeneratedPeriods(List<EventRequest> eventRequests) {
+        List<Period> generatedPeriods = periodFactory.createPeriodsBetweenRequests(eventRequests);
+        System.out.println("Calculated periods:");
+        for (Period generatedPeriod : generatedPeriods) {
+            System.out.println(generatedPeriod);
+        }
+        return generatedPeriods;
+    }
+
     private void displayFinalReport(Report report) {
         List<Request> requests = report.getRequests();
-        System.out.println("Printing final report:");
+        System.out.println("\nPrinting final report:");
         for (Request request : requests) {
             System.out.println(request);
         }

@@ -51,7 +51,7 @@ public class FlightGeneratorFacade {
     public static class Factory {
         public static FlightGeneratorFacade createFlightFacade(Source source) throws FileNotFoundException {
             if (source == Source.FILE) {
-                TextFileLoader textFileLoader = new TextFileLoader("Flights.txt");
+                TextFileLoader textFileLoader = new TextFileLoader("Flights.txt"); //todo: wyeksponowac
                 return new FlightGeneratorFacade(new StringMapperFlightsTemplateProvider(textFileLoader.readFile()),Time.getTime());
             } else if (source == Source.DUMMY) {
                 return new FlightGeneratorFacade(new DummyFlightsTemplateProvider(),Time.getTime());

@@ -3,7 +3,10 @@ package org.example.controllers;
 import org.example.entities.Flight;
 import org.example.services.RequestService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -12,6 +15,7 @@ public class FlightPeriodController {
 
     private Scanner scanner = new Scanner(System.in);
     private List<Flight> generatedFlights;
+    private static final String LINE_FORMAT = "| %-3s | %-10s | %-4s | %-15s | %-15s | %-8s";
 
     ChooseFlightResult chooseFlight(RequestService requestService, List<Flight> availableFlights) {
         generatedFlights = availableFlights;
@@ -140,20 +144,37 @@ public class FlightPeriodController {
 
 
     private void printListOfFlights(List<Flight> flights) {
-        System.out.println("available in this period: ");
-        for (int i = 0; i < flights.size(); i++) {
-            Flight generatedFlight = flights.get(i);
-            System.out.println("NR: " + (i + 1) + " " + generatedFlight);
+
+        System.out.println();
+        System.out.printf("--------------------------------------------------------------------------%n");
+        int totalWidth = 78;
+        String availableFlightsText = "Available flights";
+        int leadingSpaces = (totalWidth - availableFlightsText.length()) / 2;
+        System.out.printf("%" + leadingSpaces + "s%s%" + leadingSpaces + "s%n", "", availableFlightsText, "");
+        System.out.printf("--------------------------------------------------------------------------%n");
+        String header = String.format(LINE_FORMAT,
+                "ID", "FLT NUMBER", "DEST", "REPORT", "CLEAR", "AIRCRAFT");
+        System.out.println(header.repeat(2));
+
+        for (int i = 0; i < flights.size(); i+=2) {
+            if (i == flights.size() -1 ) {
+                System.out.println(formattingLine(flights.get(i), i));
+                break;
+            }
+            System.out.print(formattingLine(flights.get(i), i));
+            System.out.println(formattingLine(flights.get(i+1),i + 1));
+
         }
+        System.out.println();
+    }
+
+    private String formattingLine(Flight flight, int i) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM h:mma", Locale.ENGLISH);
+        LocalDateTime reportTime = flight.getReportTime();
+        LocalDateTime clearTime = flight.getClearTime();
+        String formattedReport = reportTime.format(formatter);
+        String formattedClear = clearTime.format(formatter);
+        return String.format(LINE_FORMAT, i + 1, flight.getFlightNumber(), flight.getAirportCode(),
+                formattedReport, formattedClear, flight.getAircraftType());
     }
 }
-//Period{startTime = 2024-04-01T10:05, endTime = 2024-04-02T18:45, duration: PT32H40M}
-
-/*
-*
-* Period{startTime = 01T00:00, endTime = 02T23:59:59.999999999, duration: PT47H59M59.999999999S}
-*                   , clearTime=01T10:05,
-*
-* New period: Period{startTime 01T10:05, endTime = 2024-04-02T23:59:59.999999999, duration: PT37H54M59.999999999S}
-*
-* */

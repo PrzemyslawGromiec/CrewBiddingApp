@@ -5,7 +5,9 @@ import org.example.services.FlightService;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAmount;
+import java.util.Locale;
 
 public class Flight {
     private String flightNumber;
@@ -97,16 +99,17 @@ public class Flight {
         }
     }
 
-
-    //todo: poprawic czytelnosc - dzien, godzina lotu
     @Override
     public String toString() {
-        return "flightNumber='" + flightNumber + '\'' +
-                ", airportCode='" + airportCode + '\'' +
-                ", reportTime=" + reportTime +
-                ", clearTime=" + clearTime +
-                ", aircraftType=" + aircraftType +
-                ", duration=" + getFlightDuration() +
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM h:mma", Locale.ENGLISH);
+        String formattedReport = getReportTime().format(formatter);
+        String formattedClear = getClearTime().format(formatter);
+        return flightNumber + '\'' +
+                ", destination: " + airportCode + '\'' +
+                ", reportTime = " + formattedReport +
+                ", clearTime = " + formattedClear +
+                ", aircraftType = " + aircraftType +
+                ", duration = " + getFlightDuration() +
                 '}';
     }
 }

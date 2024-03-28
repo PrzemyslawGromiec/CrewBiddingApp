@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             AppController controller = new AppController();
-            controller.run();
+            controller.runMenu();
         } catch (FileNotFoundException e) {
             System.out.println("App couldn't run due to missing file.");
         }
