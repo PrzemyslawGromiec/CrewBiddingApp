@@ -51,10 +51,8 @@ public class FlightService {
                 && flight.getFlightDuration().toHours() <= preference.getMaxFlightHours();
     }
 
-
     public List<Flight> getFlights() {
         return Collections.unmodifiableList(flights);
     }
-
 
 }

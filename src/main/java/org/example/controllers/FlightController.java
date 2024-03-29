@@ -8,6 +8,7 @@ import org.example.services.RequestService;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.spi.AbstractResourceBundleProvider;
 
 
 public class FlightController {
@@ -30,24 +31,17 @@ public class FlightController {
     }
 
 
-    //Period: 100 pasuje 300 full
-    //Period: 0 pasuje 150 full
-    //Period: 0 pasuje 0 full
-
-    //Period: 0 / wiecej
-
-
     //todo: przestudiowac!
     private void processSinglePeriod(Period period, boolean showAllDurations) {
         System.out.println("Processing period: " + period);
 
-        List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(period,showAllDurations);
+        List<Flight> flightsForCurrentPeriod = flightService.getFlightsForPeriod(period, showAllDurations);
         List<Flight> availableFlights = requestService.filterBuffer(flightsForCurrentPeriod);
         String noFlightsMessage = "No flights for this period";
         if (availableFlights.isEmpty()) {
             if (showAllDurations) {
                 System.out.println(noFlightsMessage);
-              return;
+                return;
             }
 
             flightsForCurrentPeriod = flightService.getFlightsForPeriod(period, true);
@@ -59,16 +53,7 @@ public class FlightController {
             System.out.println("Available " + flightsForCurrentPeriod.size() + " flights for extended criteria." +
                     "Do you want to consider them? (type \"yes\" or \"no\")");
 
-            while (true) {
-                String userChoice = scanner.nextLine();
-                if (userChoice.equalsIgnoreCase("no")) {
-                    return;
-                } else if (userChoice.equalsIgnoreCase("yes")) {
-                    break;
-                } else {
-                    System.out.println("Invalid input. Please type \"yes\" or \"no\".");
-                }
-            }
+            userChoiceExtendedList();
         }
 
         ChooseFlightResult result = periodController.chooseFlight(requestService, availableFlights);
@@ -85,8 +70,22 @@ public class FlightController {
 
         List<Period> newCreatedPeriods = period.splitPeriodAroundSelectedFlight(result.getFlight().orElseThrow());
 
-        processSinglePeriod(newCreatedPeriods.get(0),false);
-        processSinglePeriod(newCreatedPeriods.get(1),false);
+        processSinglePeriod(newCreatedPeriods.get(0), false);
+        processSinglePeriod(newCreatedPeriods.get(1), false);
+    }
+
+    private void userChoiceExtendedList() {
+        while (true) {
+            String userChoice = scanner.nextLine();
+            if (userChoice.equalsIgnoreCase("no")) {
+                return;
+            } else if (userChoice.equalsIgnoreCase("yes")) {
+                break;
+            } else {
+                System.out.println("Invalid input. Please type \"yes\" or \"no\".");
+            }
+        }
+
     }
 }
 
