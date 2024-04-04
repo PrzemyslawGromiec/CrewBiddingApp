@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class FlightPeriodController {
 
 
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private List<Flight> generatedFlights;
     private static final String LINE_FORMAT = "| %-3s | %-10s | %-4s | %-15s | %-15s | %-8s";
 

@@ -74,14 +74,14 @@ class StringMapperFlightsTemplateProvider implements FlightsTemplateProvider {
         if (i == -1) {
             throw new UnsupportedOperationException("Not found.");
         }
-        return i + 2;
+        return i + 1;
     }
     private List<DayOfWeek> extractDaysOfWeek(String lineFragment) {
         List<DayOfWeek> daysOfWeek = new ArrayList<>();
-        String[] dayStrings = {"MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"}; //todo wyciągnąć z DayOfWeek
-        for (String dayString : dayStrings) {
-            if (lineFragment.contains(dayString)) {
-                daysOfWeek.add(DayOfWeek.valueOf(dayString.toUpperCase()));
+        DayOfWeek[] days = DayOfWeek.values();
+        for (DayOfWeek day : days) {
+            if(lineFragment.contains(day.toString())) {
+                daysOfWeek.add(day);
             }
         }
 

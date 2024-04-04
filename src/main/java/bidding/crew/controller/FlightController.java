@@ -52,7 +52,16 @@ public class FlightController {
             System.out.println("Available " + flightsForCurrentPeriod.size() + " flights for extended criteria." +
                     "Do you want to consider them? (type \"yes\" or \"no\")");
 
-            userChoiceExtendedList();
+            while (true) {
+                String userChoice = scanner.nextLine();
+                if (userChoice.equalsIgnoreCase("no")) {
+                    return;
+                } else if (userChoice.equalsIgnoreCase("yes")) {
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please type \"yes\" or \"no\".");
+                }
+            }
         }
 
         ChooseFlightResult result = periodController.chooseFlight(requestService, availableFlights);
@@ -71,20 +80,6 @@ public class FlightController {
 
         processSinglePeriod(newCreatedPeriods.get(0), false);
         processSinglePeriod(newCreatedPeriods.get(1), false);
-    }
-
-    private void userChoiceExtendedList() {
-        while (true) {
-            String userChoice = scanner.nextLine();
-            if (userChoice.equalsIgnoreCase("no")) {
-                return;
-            } else if (userChoice.equalsIgnoreCase("yes")) {
-                break;
-            } else {
-                System.out.println("Invalid input. Please type \"yes\" or \"no\".");
-            }
-        }
-
     }
 }
 

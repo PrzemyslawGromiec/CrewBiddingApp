@@ -26,13 +26,13 @@ public class AppController {
 
     public AppController() throws FileNotFoundException {
         PreferencesService preferencesService = new PreferencesService();
-       eventService = new EventService(new EventBinRepository());
-       flightService = new FlightService(FlightGeneratorFacade.Factory.createFlightFacade(Source.FILE), preferencesService);
-       periodFactory = new PeriodFactory();
-       requestService = new RequestService(eventService);
-       flightController = new FlightController(flightService, requestService);
-       reportService = new ReportService();
-       preferenceController = new PreferenceController(preferencesService);
+        eventService = new EventService(new EventBinRepository());
+        flightService = new FlightService(FlightGeneratorFacade.Factory.createFlightFacade(Source.FILE), preferencesService);
+        periodFactory = new PeriodFactory();
+        requestService = new RequestService(eventService);
+        flightController = new FlightController(flightService, requestService);
+        reportService = new ReportService();
+        preferenceController = new PreferenceController(preferencesService);
     }
 
     public void runMenu() {
@@ -91,7 +91,7 @@ public class AppController {
         return generatedPeriods;
     }
 
-    private void displayRequests (List<Request> requests) {
+    private void displayRequests(List<Request> requests) {
         for (Request request : requests) {
             System.out.println(request);
         }
@@ -100,7 +100,7 @@ public class AppController {
     private void displayFinalReport(Report report) {
         List<Request> requests = report.getRequests();
         List<Request> sortedByPoints = requests.stream()
-                        .sorted(Comparator.comparing(Request::getPoints).reversed()).toList();
+                .sorted(Comparator.comparing(Request::getPoints).reversed()).toList();
         System.out.println("\nPrinting final report:");
         for (Request request : sortedByPoints) {
             System.out.println(request);
