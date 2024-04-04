@@ -27,32 +27,41 @@ public class PreferenceController {
         System.out.println("3. Update your aircraft types.");
         System.out.println("4. " + mainMenuMessage);
         System.out.println("Enter your choice:");
-        String userInput = scanner.nextLine();
-        if (userInput.equals("1")) { //todo switch + int
-            System.out.println("Enter new time in hours as a number:");
-            preference.setMinFlightHours(scanner.nextInt());
-        } else if (userInput.equals("2")) {
-            System.out.println("Enter new time in hours as a number:");
-            preference.setMaxFlightHours(scanner.nextInt());
-        } else if (userInput.equals("3")) {
-            System.out.println("Enter new aircraft type: ");
-            System.out.println("Available types:");
-            for (AircraftType type : AircraftType.values()) {
-                System.out.println(type);
+
+        switch (scanner.nextInt()) {
+            case 1 -> {
+                System.out.println("Enter new time in hours as a number:");
+                preference.setMinFlightHours(scanner.nextInt());
             }
-            String aircraft = scanner.nextLine();
-            preference.addType(AircraftType.valueOf(aircraft));
-        } else if (userInput.equals("4")) {
-            System.out.println(mainMenuMessage);
+            case 2 -> {
+                System.out.println("Enter new time in hours as a number:");
+                preference.setMaxFlightHours(scanner.nextInt());
+            }
+            case 3 -> addingExtraType(preference);
+            case 4 -> System.out.println(mainMenuMessage);
+            default -> invalidInput(mainMenuMessage);
+        }
+    }
+
+    private void addingExtraType(Preference preference) {
+        System.out.println("Enter new aircraft type: ");
+        System.out.println("Available types:");
+        for (AircraftType type : AircraftType.values()) {
+            System.out.println(type);
+        }
+        scanner.nextLine();
+        String aircraft = scanner.nextLine();
+        preference.addType(AircraftType.valueOf(aircraft));
+    }
+
+    private void invalidInput(String mainMenuMessage) {
+        System.out.println("Invalid option.");
+        System.out.println("Do you want to continue? Type \"yes\" or \"no\".");
+        String userChoice = scanner.nextLine();
+        if (userChoice.equalsIgnoreCase("yes")) {
+            updatePreferences();
         } else {
-            System.out.println("Invalid option.");
-            System.out.println("Do you want to continue? Type \"yes\" or \"no\".");
-            String userChoice = scanner.nextLine();
-            if (userChoice.equalsIgnoreCase("yes")) {
-                updatePreferences();
-            } else {
-                System.out.println(mainMenuMessage);
-            }
+            System.out.println(mainMenuMessage);
         }
     }
 }

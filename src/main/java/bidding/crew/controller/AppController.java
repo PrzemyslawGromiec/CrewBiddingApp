@@ -107,21 +107,17 @@ public class AppController {
         }
     }
 
-    private void modifyRequests() {
-        eventService.showEvents();
-        System.out.println("Type 'add' to add even, 'delete' to remove event, 'exit' to go back.");
-        String userInput = scanner.nextLine();
-        if (userInput.equalsIgnoreCase("add")) { //todo switch
-            eventService.addAllEvents();
-        } else if (userInput.equalsIgnoreCase("delete")) {
-            eventService.deleteById();
-        } else if (userInput.equalsIgnoreCase("exit")) {
-            System.out.println("Taking you back to the main menu.");
-        } else {
-            System.out.println("Invalid input. Type 'add' or 'delete' only.");
-            modifyRequests();
-        }
-    }
+   private void modifyRequests() {
+       eventService.showEvents();
+       System.out.println("Enter corresponding number: \n" +
+               "1. Add event \n2. Delete event \n3. Main menu");
+       switch (scanner.nextInt()) {
+           case 1 -> eventService.addAllEvents();
+           case 2 -> eventService.deleteById();
+           case 3 -> System.out.println("Going back to the main menu.");
+           default -> System.out.println("Incorrect choice. Try again.");
+       }
+   }
 
     private boolean isUserInputValid(String input) {
         if (input == null || input.isEmpty()) {
@@ -143,7 +139,7 @@ public class AppController {
             if (isUserInputValid(userInput)) {
                 return Integer.parseInt(userInput);
             } else {
-                System.out.println("Invalid input. Please enter a number!");
+                System.out.println("Invalid input. Please enter a number! check!!");
             }
         }
     }
