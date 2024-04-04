@@ -9,8 +9,8 @@ import java.util.Scanner;
 public class PreferenceController {
 
     //todo: zapisywanie preferences do pliku
-    private PreferencesService preferencesService;
-    private Scanner scanner = new Scanner(System.in);
+    private final PreferencesService preferencesService;
+    private final Scanner scanner = new Scanner(System.in);
 
     public PreferenceController(PreferencesService preferencesService) {
         this.preferencesService = preferencesService;

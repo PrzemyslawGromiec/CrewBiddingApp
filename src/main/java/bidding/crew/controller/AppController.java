@@ -109,8 +109,11 @@ public class AppController {
 
    private void modifyRequests() {
        eventService.showEvents();
-       System.out.println("Enter corresponding number: \n" +
-               "1. Add event \n2. Delete event \n3. Main menu");
+       System.out.println("""
+               Enter corresponding number:\s
+               1. Add event\s
+               2. Delete event\s
+               3. Main menu""");
        switch (scanner.nextInt()) {
            case 1 -> eventService.addAllEvents();
            case 2 -> eventService.deleteById();
